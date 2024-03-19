@@ -191,7 +191,7 @@ app.get(['/'], (req, res) => {
             email: '',
             country: '',
             state_or_province: '',
-            ourGenerateNonce: lodashNonce,
+            // ourGenerateNonce: lodashNonce,
         };
 
         res.render(path.join(__dirname, '../../', 'public/view/home/index'), {
@@ -206,7 +206,7 @@ app.get(['/'], (req, res) => {
             email: req.session.user.email_or_social_media,
             country: req.session.user.country,
             state_or_province: req.session.user.state_or_province,
-            ourGenerateNonce: lodashNonce,
+            // ourGenerateNonce: lodashNonce,
         };
 
         res.render(path.join(__dirname, '../../', 'public/view/home/index'), {

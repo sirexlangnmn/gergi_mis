@@ -5,7 +5,10 @@ module.exports = (app) => {
     const middleware = require('../middleware');
 
     const resourcesController = controllers.resources;
+    const joinController = controllers.join;
+
     app.get(['/api/v1/get/resources/pdf'], resourcesController.pdf);
+    app.get(['/api/v1/get/resources/transfering'], joinController.transfering);
 
 
 

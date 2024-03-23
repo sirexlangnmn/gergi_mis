@@ -8,7 +8,8 @@ module.exports = (app) => {
     const joinController = controllers.join;
 
     app.get(['/api/v1/get/resources/pdf'], resourcesController.pdf);
-    app.get(['/api/v1/get/resources/transfering'], joinController.transfering);
+    // app.get(['/api/v1/get/resources/transfering'], joinController.transfering);
+    // app.get(['/api/v1/get/resources/updateResourceSetup'], joinController.updateResourceSetup);
 
 
 

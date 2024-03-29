@@ -12,6 +12,6 @@ module.exports = (app) => {
     // app.get(['/api/v1/get/resources/updateResourceSetup'], joinController.updateResourceSetup);
 
 
-
+    // app.get('/api/get/course/:id', languages.getLanguageNameByCode);
     
 };

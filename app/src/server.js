@@ -182,8 +182,9 @@ db.sequelize
 
 
 // to read my references json file
-// const { readFileSync, writeFile } = require('fs');
-// const organizationsJson = readFileSync(path.join(__dirname, '../../', 'public/references/organizations.json'));
+const { readFileSync, writeFile } = require('fs');
+const classificationsJson = readFileSync(path.join(__dirname, '../../', 'public/references/classifications.json'));
+const organizationsJson = readFileSync(path.join(__dirname, '../../', 'public/references/organizations.json'));
 
 
 // home
@@ -269,28 +270,19 @@ app.get('/about-us', (req, res) => {
     });
 });
 
+function convertToTitleCase(str) {
+    return str.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+}
 
-app.get('/:classificationValue', (req, res) => {
-    let isValidUrl;
+app.get('/classification/:classificationValue', (req, res) => {
+    const classifications = JSON.parse(classificationsJson);
+
     const classificationValue = req.params.classificationValue;
-    switch (classificationValue) {
-        case 'government-agencies':
-            isValidUrl = true;
-            break;
-        case 'academic-institutions':
-            isValidUrl = true;
-            break;
-        case 'private-sectors':
-            isValidUrl = true;
-            break;
-        case 'public-sectors':
-            isValidUrl = true;
-            break;
-        default:
-            isValidUrl = false;
-    }
+    const classification = convertToTitleCase(classificationValue);
 
-    if (isValidUrl) {
+    const isExist = classifications.filter(data => data.title === classification);
+
+    if (isExist) {
         const sessionData = {
             classificationValue: classificationValue,
         };
@@ -304,18 +296,15 @@ app.get('/:classificationValue', (req, res) => {
 });
 
 
-app.get('/:organizationValue', (req, res) => {
-    let isValidUrl;
-    const organizationValue = req.params.organizationValue;
-    switch (organizationValue) {
-        case 'national-university':
-            isValidUrl = true;
-            break;
-        default:
-            isValidUrl = false;
-    }
+app.get('/organization/:organizationValue', (req, res) => {
+    const organizations = JSON.parse(organizationsJson);
 
-    if (isValidUrl) {
+    const organizationValue = req.params.organizationValue;
+    const organization = convertToTitleCase(organizationValue);
+
+    const isExist = organizations.filter(data => data.title === organization);
+
+    if (isExist) {
         const sessionData = {
             organizationValue: organizationValue,
         };

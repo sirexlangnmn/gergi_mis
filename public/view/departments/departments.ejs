@@ -29,7 +29,6 @@
         <!-- End Section-->
 
 
-        <%- include('../includes/footer/footer.ejs') %>
 
         <%- include('../includes/start_cookie_popup/start_cookie_popup.ejs') %>
 
@@ -42,9 +41,8 @@
 
     <script>
         const organizationValue = `<%= data.organizationValue %>`;
-        conosle.log('organizationValue: ', organizationValue)
     </script>
-    <!-- <script src="<%= process.env.GERGI_HOSTNAME %>javascript/slugilize.js"></script>
-    <script src="<%= process.env.GERGI_HOSTNAME %>javascript/departments.js"></script> -->
+    <script src="<%= process.env.GERGI_HOSTNAME %>javascript/slugilize.js"></script>
+    <script src="<%= process.env.GERGI_HOSTNAME %>javascript/departments.js"></script>
 
 <%- include('../includes/script/script.ejs') %>

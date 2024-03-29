@@ -44,6 +44,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 function selectClassification(classificationValue) {
-    const fullUrl = baseUrl + classificationValue;
+    const fullUrl = baseUrl + 'classification/' + classificationValue;
     window.location.href = fullUrl;
 }

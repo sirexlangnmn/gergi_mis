@@ -304,13 +304,29 @@ app.get('/:classificationValue', (req, res) => {
 });
 
 
-// app.get('/*', (req, res) => {
-//     res.render(path.join(__dirname, '../../', 'public/view/404/404'));
-// });
+app.get('/:organizationValue', (req, res) => {
+    let isValidUrl;
+    const organizationValue = req.params.organizationValue;
+    switch (organizationValue) {
+        case 'national-university':
+            isValidUrl = true;
+            break;
+        default:
+            isValidUrl = false;
+    }
 
-// app.get('*', function (req, res) {
-//     res.render(path.join(__dirname, '../../', 'public/view/notFound/notFound'));
-// });
+    if (isValidUrl) {
+        const sessionData = {
+            organizationValue: organizationValue,
+        };
+
+        res.render(path.join(__dirname, '../../', 'public/view/departments/departments'), {
+            data: sessionData,
+        });
+    } else {
+        res.render(path.join(__dirname, '../../', 'public/view/notFound/notFound'));
+    }
+});
 
 
 

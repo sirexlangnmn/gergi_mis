@@ -6,17 +6,17 @@
     },
     {
         "id": 2,
-        "title": "Sample Organizattion for Government Agencies",
+        "title": "Sample Organization for Government Agencies",
         "classification_id": 1
     },
     {
         "id": 3,
-        "title": "Sample Organizattion for Private Sectors",
+        "title": "Sample Organization for Private Sectors",
         "classification_id": 3
     },
     {
         "id": 3,
-        "title": "Sample Organizattion for Public Sectors",
+        "title": "Sample Organization for Public Sectors",
         "classification_id": 4
     }
 ]

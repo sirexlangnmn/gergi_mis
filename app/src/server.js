@@ -180,6 +180,12 @@ db.sequelize
 // db sequelize sync process [end]
 //======================================
 
+
+// to read my references json file
+// const { readFileSync, writeFile } = require('fs');
+// const organizationsJson = readFileSync(path.join(__dirname, '../../', 'public/references/organizations.json'));
+
+
 // home
 app.get(['/'], (req, res) => {
     if (req.session.user === undefined) {
@@ -215,6 +221,96 @@ app.get(['/'], (req, res) => {
     }
 });
 
+
+
+app.get(['/library'], (req, res) => {
+    if (req.session.user === undefined) {
+        const sessionData = {
+            uuid: '',
+            type: '',
+            first_name: '',
+            last_name: '',
+            email: '',
+            country: '',
+            state_or_province: '',
+            // ourGenerateNonce: lodashNonce,
+        };
+
+        res.render(path.join(__dirname, '../../', 'public/view/library/library'), {
+            data: sessionData,
+        });
+    } else {
+        const sessionData = {
+            uuid: req.session.user.uuid,
+            type: req.session.user.type,
+            first_name: req.session.user.first_name,
+            last_name: req.session.user.last_name,
+            email: req.session.user.email_or_social_media,
+            country: req.session.user.country,
+            state_or_province: req.session.user.state_or_province,
+            // ourGenerateNonce: lodashNonce,
+        };
+
+        res.render(path.join(__dirname, '../../', 'public/view/library/library'), {
+            data: sessionData,
+        });
+    }
+});
+
+app.get('/contact-us', (req, res) => {
+    res.render(path.join(__dirname, '../../', 'public/view/contact_us/contact_us'), {
+
+    });
+});
+
+app.get('/about-us', (req, res) => {
+    res.render(path.join(__dirname, '../../', 'public/view/about_us/about_us'), {
+
+    });
+});
+
+
+app.get('/:classificationValue', (req, res) => {
+    let isValidUrl;
+    const classificationValue = req.params.classificationValue;
+    switch (classificationValue) {
+        case 'government-agencies':
+            isValidUrl = true;
+            break;
+        case 'academic-institutions':
+            isValidUrl = true;
+            break;
+        case 'private-sectors':
+            isValidUrl = true;
+            break;
+        case 'public-sectors':
+            isValidUrl = true;
+            break;
+        default:
+            isValidUrl = false;
+    }
+
+    if (isValidUrl) {
+        const sessionData = {
+            classificationValue: classificationValue,
+        };
+
+        res.render(path.join(__dirname, '../../', 'public/view/organizations/organizations'), {
+            data: sessionData,
+        });
+    } else {
+        res.render(path.join(__dirname, '../../', 'public/view/notFound/notFound'));
+    }
+});
+
+
+// app.get('/*', (req, res) => {
+//     res.render(path.join(__dirname, '../../', 'public/view/404/404'));
+// });
+
+// app.get('*', function (req, res) {
+//     res.render(path.join(__dirname, '../../', 'public/view/notFound/notFound'));
+// });
 
 
 

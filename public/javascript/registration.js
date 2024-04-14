@@ -59,20 +59,13 @@ function submitRegistrationForm(event) {
     }
 
     if (passwordValue !== confirmPasswordValue) {
-        
-        console.log('passwordValue : ', passwordValue);
-        console.log('confirmPasswordValue : ', confirmPasswordValue);
         displayErrorMessage('Passwords do not match', RegistrationPasswordError);
         isValid = false;
     }
 
-    console.log('isValid 1 : ', isValid);
-
     if (!isValid) {
         return;
     }
-
-    console.log('isValid 1 : ', isValid);
 
     var formData = {
         fullNameInput: fullNameValue,
@@ -81,9 +74,6 @@ function submitRegistrationForm(event) {
         passwordInput: passwordValue
     };
 
-    console.log('frontend registration.js formData', formData)
-
-    // Send data to the server using fetch API
     fetch(baseUrl + 'api/post/registration', {
         method: 'POST',
         headers: {
@@ -98,14 +88,9 @@ function submitRegistrationForm(event) {
         return response.json();
     })
     .then(function(data) {
-        // Handle success response from the server
-        console.log('Registration successful:', data);
-        alert('Registration successful');
-        // Optionally, redirect to another page after successful registration
         window.location.href = '/login';
     })
     .catch(function(error) {
-        // Handle error
         console.error('Registration failed:', error);
         alert('Registration failed');
     });

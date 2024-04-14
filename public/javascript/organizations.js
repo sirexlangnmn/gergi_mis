@@ -2,28 +2,20 @@ document.addEventListener('DOMContentLoaded', function () {
     // you can see this to organizations.ejs
     // const classificationValue = '<%= data.classificationValue %>';
 
+    // look to references folder
     // console.log('organization.js classificationsReference : ', classificationsReference)
     // console.log('organization.js organizationsReference : ', organizationsReference)
 
     const classification = convertToTitleCase(classificationValue);
-    // console.log('organization.js classification : ', classification)
 
-    // Filter classifications based on the classificationValue
-    const classifications = classificationsReference.filter(item => item.title === classification );
-    // console.log('organization.js classifications : ', classifications)
-
-    // if (classifications.length === 0) {
-    //     console.error('No matching classification found');
-    //     return;
-    // }
+    const classifications = classificationsReference.filter(item => item.title === classification);
 
     const classificationId = classifications[0].id;
 
-    // Filter organizations based on the classificationId
     const foundItems = organizationsReference.filter(item => item.classification_id === classificationId);
 
     const organizationContainer = document.getElementById('organizationContainer');
-    organizationContainer.innerHTML = ''; // Clear existing content
+    organizationContainer.innerHTML = '';
 
     foundItems.forEach(item => {
         const slug = slugilize(`${item.title}`);

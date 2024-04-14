@@ -4,11 +4,11 @@ document.addEventListener('DOMContentLoaded', async function () {
 });
 
 async function displayDepartmentsByOrganization() {
+    // can be found to departments.ejs
     // const organizationValue = '<%= data.organizationValue %>';
 
     const organization = convertToTitleCase(organizationValue);
 
-    // create async await code here to send data of organization to a url and fetch data in the server
     try {
         const response = await fetch(baseUrl + 'api/get/departments-by-organization', {
             method: 'POST',

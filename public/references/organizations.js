@@ -1,4 +1,4 @@
-[
+const organizationsReference = [
     {
         "id": 1,
         "title": "National University",

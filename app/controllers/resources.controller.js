@@ -2,7 +2,7 @@ const db = require('../models');
 const sequelizeConfig = require('../config/sequelize.config.js');
 
 const Resources = db.resources;
-console.log('resources.controller.js Resources', Resources)
+
 
 const Op = db.Sequelize.Op;
 

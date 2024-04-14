@@ -319,6 +319,8 @@ app.get('/organization/:organizationValue', (req, res) => {
 
 
 
+
+
 app.get('/logout', function (req, res, next) {
     // remove the req.user property and clear the login session
     //req.logout();

@@ -1,4 +1,4 @@
-[
+const departmentsReference = [
     {
         "id": 1,
         "title": "Medicine",

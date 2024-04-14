@@ -1,4 +1,4 @@
-[
+const classificationsReference = [
     {
         "id": 1,
         "title": "Government Agencies"
@@ -15,4 +15,4 @@
         "id": 4,
         "title": "Public Sectors"
     }
-]
+];

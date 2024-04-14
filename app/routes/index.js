@@ -6,10 +6,12 @@ module.exports = (app) => {
 
     const resourcesController = controllers.resources;
     const joinController = controllers.join;
-    const departments = controllers.departments;
+    const departmentsController = controllers.departments;
+    const usersController = controllers.users;
 
     app.get(['/api/v1/get/resources/pdf'], resourcesController.pdf);
-    app.post(['/api/get/departments-by-organization'], departments.getDepartmentsByOrganization);
+    app.post(['/api/get/departments-by-organization'], departmentsController.getDepartmentsByOrganization);
+    app.post(['/api/post/registration'], usersController.registration);
 
 
     // app.get(['/api/v1/get/resources/transfering'], joinController.transfering);

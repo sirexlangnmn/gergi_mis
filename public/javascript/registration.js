@@ -14,19 +14,17 @@ let RegistrationTermsAndConditionError = getId('RegistrationTermsAndConditionErr
 
 let registrationForm = getId('registrationForm');
 
-function submitRegistrationForm(event) {
-    event.preventDefault();
-
-    let fullNameValue = RegistrationFullName.value;
-    let mobileNumberValue = RegistrationMobileNumber.value;
-    let emailAddressValue = RegistrationEmailAddress.value;
-    let passwordValue = RegistrationPassword.value;
-    let confirmPasswordValue = RegistrationConfirmPassword.value;
-    let termsAndConditionValue = RegistrationTermsAndCondition.checked;
+function validateRegistrationForm() {
+    const fullNameValue = RegistrationFullName.value;
+    const mobileNumberValue = RegistrationMobileNumber.value;
+    const emailAddressValue = RegistrationEmailAddress.value;
+    const passwordValue = RegistrationPassword.value;
+    const confirmPasswordValue = RegistrationConfirmPassword.value;
+    const termsAndConditionValue = RegistrationTermsAndCondition.checked;
 
     resetErrorMessages();
 
-    var isValid = true;
+    let isValid = true;
 
     if (!fullNameValue) {
         displayErrorMessage('Please enter a Name', RegistrationFullNameError);
@@ -39,7 +37,7 @@ function submitRegistrationForm(event) {
     }
 
     if (!emailAddressValue) {
-        displayErrorMessage('Please enter a Email Address', RegistrationEmailAddressError);
+        displayErrorMessage('Please enter an Email Address', RegistrationEmailAddressError);
         isValid = false;
     }
 
@@ -59,19 +57,26 @@ function submitRegistrationForm(event) {
     }
 
     if (passwordValue !== confirmPasswordValue) {
-        displayErrorMessage('Passwords do not match', RegistrationPasswordError);
+        displayErrorMessage('Passwords do not match', RegistrationConfirmPasswordError);
         isValid = false;
     }
 
-    if (!isValid) {
+    return isValid;
+}
+
+
+function submitRegistrationForm(event) {
+    event.preventDefault();
+
+    if (!validateRegistrationForm()) {
         return;
     }
 
-    var formData = {
-        fullNameInput: fullNameValue,
-        mobileNumberInput: mobileNumberValue,
-        emailAddressInput: emailAddressValue,
-        passwordInput: passwordValue
+    const formData = {
+        fullNameInput: RegistrationFullName.value,
+        mobileNumberInput: RegistrationMobileNumber.value,
+        emailAddressInput: RegistrationEmailAddress.value,
+        passwordInput: RegistrationPassword.value
     };
 
     fetch(baseUrl + 'api/post/registration', {
@@ -81,28 +86,25 @@ function submitRegistrationForm(event) {
         },
         body: JSON.stringify(formData)
     })
-    .then(function(response) {
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-        return response.json();
-    })
-    .then(function(data) {
-        window.location.href = '/login';
-    })
-    .catch(function(error) {
-        console.error('Registration failed:', error);
-        alert('Registration failed');
-    });
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            window.location.href = '/login';
+        })
+        .catch(error => {
+            console.error('Registration failed:', error);
+            alert('Registration failed');
+        });
 }
-
-
-registrationForm.addEventListener('submit', submitRegistrationForm);
 
 
 function resetErrorMessages() {
     const errorElements = document.querySelectorAll('.error-message');
-    errorElements.forEach(function(element) {
+    errorElements.forEach(element => {
         element.innerHTML = '';
     });
 }
@@ -113,64 +115,62 @@ function displayErrorMessage(message, elementId) {
 }
 
 
-RegistrationFullName.addEventListener("keyup", function(event) {
+registrationForm.addEventListener('submit', submitRegistrationForm);
+
+
+RegistrationFullName.addEventListener("keyup", function (event) {
     event.target.value
         ? messageValidationToggle(RegistrationFullNameError, null)
-        : messageValidationToggle(RegistrationFullNameError, 'Please enter a Name -2');
+        : messageValidationToggle(RegistrationFullNameError, 'Please enter a Name');
 });
 
-RegistrationMobileNumber.addEventListener("keyup", function(event) {
+RegistrationMobileNumber.addEventListener("keyup", function (event) {
     event.target.value
         ? messageValidationToggle(RegistrationMobileNumberError, null)
-        : messageValidationToggle(RegistrationMobileNumberError, 'Please enter a Mobile Number -2');
+        : messageValidationToggle(RegistrationMobileNumberError, 'Please enter a Mobile Number');
 });
 
-RegistrationEmailAddress.addEventListener("keyup", function(event) {
+RegistrationEmailAddress.addEventListener("keyup", function (event) {
     event.target.value
         ? messageValidationToggle(RegistrationEmailAddressError, null)
-        : messageValidationToggle(RegistrationEmailAddressError, 'Please enter a Email Address -2');
+        : messageValidationToggle(RegistrationEmailAddressError, 'Please enter an Email Address');
 });
 
-RegistrationPassword.addEventListener("keyup", function(event) {
+RegistrationPassword.addEventListener("keyup", function (event) {
     event.target.value
         ? messageValidationToggle(RegistrationPasswordError, null)
-        : messageValidationToggle(RegistrationPasswordError, 'Please enter a Password -2');
+        : messageValidationToggle(RegistrationPasswordError, 'Please enter a Password');
 
-    let passwordValue = RegistrationPassword.value;
-    let confirmPasswordValue = RegistrationConfirmPassword.value;
-
-    if (passwordValue && confirmPasswordValue) {
-        if (passwordValue !== confirmPasswordValue) {
-            messageValidationToggle(RegistrationPasswordError, 'Passwords do not match -2');
-        } else {
-            messageValidationToggle(RegistrationPasswordError, null)
-        }
-    }
-
+    validatePasswordConfirmation();
 });
 
-RegistrationConfirmPassword.addEventListener("keyup", function(event) {
+RegistrationConfirmPassword.addEventListener("keyup", function (event) {
     event.target.value
         ? messageValidationToggle(RegistrationConfirmPasswordError, null)
-        : messageValidationToggle(RegistrationConfirmPasswordError, 'Please enter a Confirm Password -2');
+        : messageValidationToggle(RegistrationConfirmPasswordError, 'Please enter a Confirm Password');
 
-    let passwordValue = RegistrationPassword.value;
-    let confirmPasswordValue = RegistrationConfirmPassword.value;
+    validatePasswordConfirmation();
+});
+
+RegistrationTermsAndCondition.addEventListener("change", function (event) {
+    event.target.checked
+        ? messageValidationToggle(RegistrationTermsAndConditionError, null)
+        : messageValidationToggle(RegistrationTermsAndConditionError, 'Please accept Terms and Conditions');
+});
+
+
+function validatePasswordConfirmation() {
+    const passwordValue = RegistrationPassword.value;
+    const confirmPasswordValue = RegistrationConfirmPassword.value;
 
     if (passwordValue && confirmPasswordValue) {
         if (passwordValue !== confirmPasswordValue) {
-            messageValidationToggle(RegistrationPasswordError, 'Passwords do not match -2');
+            messageValidationToggle(RegistrationPasswordError, 'Passwords do not match');
         } else {
-            messageValidationToggle(RegistrationPasswordError, null)
+            messageValidationToggle(RegistrationPasswordError, null);
         }
     }
-});
-
-RegistrationTermsAndCondition.addEventListener("change", function(event) {
-    event.target.checked
-        ? messageValidationToggle(RegistrationTermsAndConditionError, null)
-        : messageValidationToggle(RegistrationTermsAndConditionError, 'Please accept Terms and Conditions -2');
-});
+}
 
 
 function messageValidationToggle(element, message) {

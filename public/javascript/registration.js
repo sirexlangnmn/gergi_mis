@@ -34,6 +34,9 @@ function validateRegistrationForm() {
     if (!mobileNumberValue) {
         displayErrorMessage('Please enter a Mobile Number', RegistrationMobileNumberError);
         isValid = false;
+    } else if (mobileNumberValue.length !== 11 || !/^\d+$/.test(mobileNumberValue)) {
+        displayErrorMessage('Please enter a Mobile Number', RegistrationMobileNumberError);
+        isValid = false;
     }
 
     if (!emailAddressValue) {
@@ -57,7 +60,7 @@ function validateRegistrationForm() {
     }
 
     if (passwordValue !== confirmPasswordValue) {
-        displayErrorMessage('Passwords do not match', RegistrationConfirmPasswordError);
+        displayErrorMessage('Passwords do not match', RegistrationPasswordError);
         isValid = false;
     }
 
@@ -120,42 +123,50 @@ registrationForm.addEventListener('submit', submitRegistrationForm);
 
 RegistrationFullName.addEventListener("keyup", function (event) {
     event.target.value
-        ? messageValidationToggle(RegistrationFullNameError, null)
-        : messageValidationToggle(RegistrationFullNameError, 'Please enter a Name');
+        ? displayErrorMessage(null, RegistrationFullNameError)
+        : displayErrorMessage('Please enter a Name', RegistrationFullNameError)
 });
 
 RegistrationMobileNumber.addEventListener("keyup", function (event) {
-    event.target.value
-        ? messageValidationToggle(RegistrationMobileNumberError, null)
-        : messageValidationToggle(RegistrationMobileNumberError, 'Please enter a Mobile Number');
+    const mobileNumberValue = event.target.value;
+
+    mobileNumberValue
+        ? displayErrorMessage(null, RegistrationMobileNumberError)
+        : displayErrorMessage('Please enter a Mobile Number', RegistrationMobileNumberError);
+
+    if (mobileNumberValue.length !== 11 || !/^\d+$/.test(mobileNumberValue)) {
+        displayErrorMessage('Please enter a Mobile Number', RegistrationMobileNumberError);
+    } else {
+        displayErrorMessage(null, RegistrationMobileNumberError);
+    }
 });
 
 RegistrationEmailAddress.addEventListener("keyup", function (event) {
     event.target.value
-        ? messageValidationToggle(RegistrationEmailAddressError, null)
-        : messageValidationToggle(RegistrationEmailAddressError, 'Please enter an Email Address');
+        ? displayErrorMessage(null, RegistrationEmailAddressError)
+        : displayErrorMessage('Please enter an Email Address', RegistrationEmailAddressError);
 });
 
 RegistrationPassword.addEventListener("keyup", function (event) {
     event.target.value
-        ? messageValidationToggle(RegistrationPasswordError, null)
-        : messageValidationToggle(RegistrationPasswordError, 'Please enter a Password');
+        ? displayErrorMessage(null, RegistrationPasswordError)
+        : displayErrorMessage('Please enter a Password', RegistrationPasswordError);
 
     validatePasswordConfirmation();
 });
 
 RegistrationConfirmPassword.addEventListener("keyup", function (event) {
     event.target.value
-        ? messageValidationToggle(RegistrationConfirmPasswordError, null)
-        : messageValidationToggle(RegistrationConfirmPasswordError, 'Please enter a Confirm Password');
+        ? displayErrorMessage(null, RegistrationConfirmPasswordError)
+        : displayErrorMessage('Please enter a Confirm Password', RegistrationConfirmPasswordError);
 
     validatePasswordConfirmation();
 });
 
 RegistrationTermsAndCondition.addEventListener("change", function (event) {
     event.target.checked
-        ? messageValidationToggle(RegistrationTermsAndConditionError, null)
-        : messageValidationToggle(RegistrationTermsAndConditionError, 'Please accept Terms and Conditions');
+        ? displayErrorMessage(null, RegistrationTermsAndConditionError)
+        : displayErrorMessage('Please accept Terms and Conditions', RegistrationTermsAndConditionError);
 });
 
 
@@ -165,22 +176,9 @@ function validatePasswordConfirmation() {
 
     if (passwordValue && confirmPasswordValue) {
         if (passwordValue !== confirmPasswordValue) {
-            messageValidationToggle(RegistrationPasswordError, 'Passwords do not match');
+            displayErrorMessage('Passwords do not match', RegistrationPasswordError);
         } else {
-            messageValidationToggle(RegistrationPasswordError, null);
-        }
-    }
-}
-
-
-function messageValidationToggle(element, message) {
-    if (element) {
-        if (message) {
-            element.style.display = 'block';
-            element.innerHTML = message;
-        } else {
-            element.style.display = 'none';
-            element.innerHTML = '';
+            displayErrorMessage(null, RegistrationPasswordError);
         }
     }
 }

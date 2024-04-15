@@ -27,6 +27,9 @@
                         <h5 class="my-6 text-xl font-semibold">Login</h5>
                         <form action="javascript:void(0);" class="text-start" method="POST" id="loginForm"
                             name="loginForm" enctype="multipart/form-data" accept-charset="utf-8">
+                            <p class="mb-0" id="error-msg" style="opacity: 1;">
+                                <div id="LoginError" class="alert alert-warning"></div>
+                            </p>
                             <div class="grid grid-cols-1">
 
                                 <div class="mb-4">
@@ -73,6 +76,8 @@
 
         <%- include('../includes/ltr_and_rtl_mode/ltr_and_rtl_mode.ejs') %>
 
-        <!-- <script src="<%= process.env.GERGI_HOSTNAME %>javascript/login.js"></script> -->
+        <script src="<%= process.env.GERGI_HOSTNAME %>javascript/displayErrorMessage.js"></script>
+        <script src="<%= process.env.GERGI_HOSTNAME %>javascript/resetErrorMessages.js"></script>
+        <script src="<%= process.env.GERGI_HOSTNAME %>javascript/login.js"></script>
 
         <%- include('../includes/script/script.ejs') %>

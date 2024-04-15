@@ -7,9 +7,7 @@ async function displayDepartmentsByOrganization() {
     // can be found to departments.ejs
     // const organizationValue = '<%= data.organizationValue %>';
 
-    // const organization = convertToTitleCase(organizationValue);
-
-    const organizationId = organization_id;
+    const organization = convertToTitleCase(organizationValue);
 
     try {
         const response = await fetch(baseUrl + 'api/get/departments-by-organization', {
@@ -17,7 +15,7 @@ async function displayDepartmentsByOrganization() {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ organizationId })
+            body: JSON.stringify({ organization })
         });
 
         if (response.ok) {
@@ -53,8 +51,8 @@ async function displayDepartmentsByOrganization() {
 
 
 
-function selectCourse(departmentValue) {
-    console.log('organizationValue: ', departmentValue)
-    const fullUrl = baseUrl + 'courses/' + departmentValue;
-    window.location.href = fullUrl;
+function selectCourse(organizationValue) {
+    console.log('organizationValue: ', organizationValue)
+    // const fullUrl = baseUrl + organizationValue;
+    // window.location.href = fullUrl;
 }

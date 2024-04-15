@@ -1,33 +1,32 @@
 document.addEventListener('DOMContentLoaded', async function () {
-    displayDepartmentsByOrganization();
-
+    displayCoursesByDepartment();
 });
 
-async function displayDepartmentsByOrganization() {
-    // can be found to departments.ejs
-    // const organizationValue = '<%= data.organizationValue %>';
+async function displayCoursesByDepartment() {
+    // can be found to course.ejs
+    // const departmentValue = '<%= data.departmentValue %>';
 
-    // const organization = convertToTitleCase(organizationValue);
+    const department = convertToTitleCase(departmentValue);
 
-    const organizationId = organization_id;
 
     try {
-        const response = await fetch(baseUrl + 'api/get/departments-by-organization', {
+        const response = await fetch(baseUrl + 'api/get/courses-by-department', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ organizationId })
+            body: JSON.stringify({ department })
         });
 
         if (response.ok) {
             const data = await response.json();
+            console.log('frontend course title data: ', data)
 
-            const departmentContainer = document.getElementById('departmentContainer');
-            departmentContainer.innerHTML = '';
+            const courseContainer = document.getElementById('courseContainer');
+            courseContainer.innerHTML = '';
 
             data.forEach(item => {
-                const slug = slugilize(`${item.title}`);
+                const slug = slugilize(`${item}`);
                 const div = document.createElement('div');
                 div.className = 'p-6 mt-6 text-center duration-500 hover:shadow-xl hover:shadow-gray-100 dark:hover:shadow-gray-800 rounded-2xl';
 
@@ -36,12 +35,12 @@ async function displayDepartmentsByOrganization() {
                         <img src="${baseUrl}/uploads/gergi/national_university.svg" class="h-100 w-100" alt="">
                     </div>
                     <div class="content mt-7">
-                        <a href="javascript:void(0)" onclick="selectCourse('${slug}')" class="text-lg font-medium title h5 hover:text-indigo-600">${item.title}</a>
+                        <a href="javascript:void(0)" onclick="selectCourse('${slug}')" class="text-lg font-medium title h5 hover:text-indigo-600">${item}</a>
                     </div>
                 `;
 
                 div.innerHTML = innerHTML;
-                departmentContainer.appendChild(div);
+                courseContainer.appendChild(div);
             });
         } else {
             throw new Error('Network response was not ok.');
@@ -55,6 +54,6 @@ async function displayDepartmentsByOrganization() {
 
 function selectCourse(departmentValue) {
     console.log('organizationValue: ', departmentValue)
-    const fullUrl = baseUrl + 'courses/' + departmentValue;
-    window.location.href = fullUrl;
+    // const fullUrl = baseUrl + 'courses/' + departmentValue;
+    // window.location.href = fullUrl;
 }

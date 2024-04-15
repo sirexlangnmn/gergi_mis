@@ -27,13 +27,11 @@ exports.getDepartmentsByOrganization = async (req, res) => {
     }
 
     try {
-        const { organization } = req.body;
+        const { organizationId } = req.body;
 
-        const organizationData = await Organizations.findOne({ where: { title: organization } });
+        const departmentsData = await Departments.findAll({ where: { organization_id: organizationId } });
 
-        if (!organizationData) { return res.status(404).json({ error: 'Organization not found' }); }
-
-        const departmentsData = await Departments.findAll({ where: { organization_id: organizationData.id } });
+        if (!departmentsData) { return res.status(404).json({ error: 'Departments not found' }); }
 
         res.json(departmentsData);
     } catch (error) {

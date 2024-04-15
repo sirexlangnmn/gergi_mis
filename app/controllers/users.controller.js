@@ -46,3 +46,82 @@ exports.registration = async (req, res) => {
         });
     }
 };
+
+
+// exports.login = async (req, res) => {
+//     const errors = validationResult(req);
+
+//     try {
+//         if (!errors.isEmpty()) {
+//             return res.status(400).send({
+//                 message: errors.array(),
+//             });
+//         }
+
+//         const { emailAddressInput, passwordInput } = req.body;
+
+//         let email = emailAddressInput;
+//         let password = passwordInput;
+
+//         // other code here for login
+
+//     } catch (error) {
+//         console.error('Error during user registration:', error);
+//         return res.status(500).json({
+//             error: {
+//                 message: 'Internal server error',
+//             },
+//         });
+//     }
+// };
+
+
+exports.login = async (req, res) => {
+    const errors = validationResult(req);
+
+    try {
+        if (!errors.isEmpty()) {
+            return res.status(400).send({
+                message: errors.array(),
+            });
+        }
+
+        const { emailAddressInput, passwordInput } = req.body;
+
+        const user = await Users.findOne({ where: { email: emailAddressInput } });
+
+
+        if (!user) {
+            return res.status(401).json({
+                error: {
+                    message: 'The email address or password is incorrect. Please retry.'
+                }
+            });
+        }
+
+
+        if (passwordInput === user.password) {
+            let sessionUser = {
+                name: user.name,
+                organization_id:  user.organization_id
+            };
+
+            req.session.user = sessionUser
+            return res.status(200).json({ message: 'Login successful', user });
+        } else {
+            // return res.status(401).json({ error: { message: 'The email address or password is incorrect. Please retry.' } });
+            return res.status(401).json({ error: {
+                message: 'The email address or password is incorrect. Please retry.',
+            }});
+        }
+
+
+    } catch (error) {
+        console.error('Error during user login:', error);
+        return res.status(500).json({
+            error: {
+                message: 'Internal server error',
+            },
+        });
+    }
+};

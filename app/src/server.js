@@ -224,39 +224,39 @@ app.get(['/'], (req, res) => {
 
 
 
-app.get(['/library'], (req, res) => {
-    if (req.session.user === undefined) {
-        const sessionData = {
-            uuid: '',
-            type: '',
-            first_name: '',
-            last_name: '',
-            email: '',
-            country: '',
-            state_or_province: '',
-            // ourGenerateNonce: lodashNonce,
-        };
+// app.get(['/library'], (req, res) => {
+//     if (req.session.user === undefined) {
+//         const sessionData = {
+//             uuid: '',
+//             type: '',
+//             first_name: '',
+//             last_name: '',
+//             email: '',
+//             country: '',
+//             state_or_province: '',
+//             // ourGenerateNonce: lodashNonce,
+//         };
 
-        res.render(path.join(__dirname, '../../', 'public/view/library/library'), {
-            data: sessionData,
-        });
-    } else {
-        const sessionData = {
-            uuid: req.session.user.uuid,
-            type: req.session.user.type,
-            first_name: req.session.user.first_name,
-            last_name: req.session.user.last_name,
-            email: req.session.user.email_or_social_media,
-            country: req.session.user.country,
-            state_or_province: req.session.user.state_or_province,
-            // ourGenerateNonce: lodashNonce,
-        };
+//         res.render(path.join(__dirname, '../../', 'public/view/library/library'), {
+//             data: sessionData,
+//         });
+//     } else {
+//         const sessionData = {
+//             uuid: req.session.user.uuid,
+//             type: req.session.user.type,
+//             first_name: req.session.user.first_name,
+//             last_name: req.session.user.last_name,
+//             email: req.session.user.email_or_social_media,
+//             country: req.session.user.country,
+//             state_or_province: req.session.user.state_or_province,
+//             // ourGenerateNonce: lodashNonce,
+//         };
 
-        res.render(path.join(__dirname, '../../', 'public/view/library/library'), {
-            data: sessionData,
-        });
-    }
-});
+//         res.render(path.join(__dirname, '../../', 'public/view/library/library'), {
+//             data: sessionData,
+//         });
+//     }
+// });
 
 app.get('/contact-us', (req, res) => {
     res.render(path.join(__dirname, '../../', 'public/view/contact_us/contact_us'), {
@@ -270,52 +270,63 @@ app.get('/about-us', (req, res) => {
     });
 });
 
-function convertToTitleCase(str) {
-    return str.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
-}
-
-app.get('/classification/:classificationValue', (req, res) => {
-    const classifications = JSON.parse(classificationsJson);
-
-    const classificationValue = req.params.classificationValue;
-    const classification = convertToTitleCase(classificationValue);
-
-    const isExist = classifications.filter(data => data.title === classification);
-
-    if (isExist) {
-        const sessionData = {
-            classificationValue: classificationValue,
-        };
-
-        res.render(path.join(__dirname, '../../', 'public/view/organizations/organizations'), {
-            data: sessionData,
-        });
-    } else {
-        res.render(path.join(__dirname, '../../', 'public/view/notFound/notFound'));
-    }
-});
 
 
-app.get('/organization/:organizationValue', (req, res) => {
-    const organizations = JSON.parse(organizationsJson);
 
-    const organizationValue = req.params.organizationValue;
-    const organization = convertToTitleCase(organizationValue);
 
-    const isExist = organizations.filter(data => data.title === organization);
+// function convertToTitleCase(str) {
+//     return str.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+// }
 
-    if (isExist) {
-        const sessionData = {
-            organizationValue: organizationValue,
-        };
 
-        res.render(path.join(__dirname, '../../', 'public/view/departments/departments'), {
-            data: sessionData,
-        });
-    } else {
-        res.render(path.join(__dirname, '../../', 'public/view/notFound/notFound'));
-    }
-});
+
+
+
+// app.get('/classification/:classificationValue', (req, res) => {
+//     const classifications = JSON.parse(classificationsJson);
+
+//     const classificationValue = req.params.classificationValue;
+//     const classification = convertToTitleCase(classificationValue);
+
+//     const isExist = classifications.filter(data => data.title === classification);
+
+//     if (isExist) {
+//         const sessionData = {
+//             classificationValue: classificationValue,
+//         };
+
+//         res.render(path.join(__dirname, '../../', 'public/view/organizations/organizations'), {
+//             data: sessionData,
+//         });
+//     } else {
+//         res.render(path.join(__dirname, '../../', 'public/view/notFound/notFound'));
+//     }
+// });
+
+
+
+
+
+// app.get('/organization/:organizationValue', (req, res) => {
+//     const organizations = JSON.parse(organizationsJson);
+
+//     const organizationValue = req.params.organizationValue;
+//     const organization = convertToTitleCase(organizationValue);
+
+//     const isExist = organizations.filter(data => data.title === organization);
+
+//     if (isExist) {
+//         const sessionData = {
+//             organizationValue: organizationValue,
+//         };
+
+//         res.render(path.join(__dirname, '../../', 'public/view/departments/departments'), {
+//             data: sessionData,
+//         });
+//     } else {
+//         res.render(path.join(__dirname, '../../', 'public/view/notFound/notFound'));
+//     }
+// });
 
 
 app.get('/registration', (req, res) => {
@@ -385,6 +396,40 @@ app.get('/login', (req, res) => {
         });
     }
 
+});
+
+
+app.get('/departments', (req, res) => {
+
+   if (req.session.user === undefined) {
+        res.render(path.join(__dirname, '../../', 'public/view/login/login'));
+    } else {
+        const sessionData = {
+            uuid: req.session.user.uuid,
+            organization_id: req.session.user.organization_id,
+        };
+
+        res.render(path.join(__dirname, '../../', 'public/view/departments/departments'), {
+            data: sessionData,
+        });
+    }
+});
+
+app.get('/courses/:departmentValue', (req, res) => {
+
+    const departmentValue = req.params.departmentValue;
+
+    if (departmentValue) {
+        const sessionData = {
+            departmentValue: departmentValue,
+        };
+
+        res.render(path.join(__dirname, '../../', 'public/view/courses/courses'), {
+            data: sessionData,
+        });
+    } else {
+        res.render(path.join(__dirname, '../../', 'public/view/login/login'));
+    }
 });
 
 

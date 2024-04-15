@@ -105,19 +105,6 @@ function submitRegistrationForm(event) {
 }
 
 
-function resetErrorMessages() {
-    const errorElements = document.querySelectorAll('.error-message');
-    errorElements.forEach(element => {
-        element.innerHTML = '';
-    });
-}
-
-
-function displayErrorMessage(message, elementId) {
-    elementId.innerHTML = message;
-}
-
-
 registrationForm.addEventListener('submit', submitRegistrationForm);
 
 

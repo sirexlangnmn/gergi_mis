@@ -87,6 +87,9 @@
 
         <%- include('../includes/ltr_and_rtl_mode/ltr_and_rtl_mode.ejs') %>
 
+
+        <script src="<%= process.env.GERGI_HOSTNAME %>javascript/displayErrorMessage.js"></script>
+        <script src="<%= process.env.GERGI_HOSTNAME %>javascript/resetErrorMessages.js"></script>
         <script src="<%= process.env.GERGI_HOSTNAME %>javascript/registration.js"></script>
 
         <%- include('../includes/script/script.ejs') %>

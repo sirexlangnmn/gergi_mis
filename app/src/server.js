@@ -433,6 +433,12 @@ app.get('/courses/:departmentValue', (req, res) => {
 });
 
 
+app.get('/resources', (req, res) => {
+
+    res.render(path.join(__dirname, '../../', 'public/view/resources/resources'));
+});
+
+
 app.get('/logout', function (req, res, next) {
     // remove the req.user property and clear the login session
     //req.logout();

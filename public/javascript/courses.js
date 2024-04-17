@@ -52,8 +52,10 @@ async function displayCoursesByDepartment() {
 
 
 
-function selectCourse(departmentValue) {
+function selectCourse(courseValue) {
     console.log('organizationValue: ', departmentValue)
-    // const fullUrl = baseUrl + 'courses/' + departmentValue;
-    // window.location.href = fullUrl;
+    // const fullUrl = baseUrl + 'resources/' + courseValue;
+
+    const fullUrl = baseUrl + 'resources';
+    window.location.href = fullUrl;
 }

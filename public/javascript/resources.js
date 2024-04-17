@@ -3,6 +3,12 @@ document.addEventListener("DOMContentLoaded", function() {
     const items = [
         { imageSrc: `${baseUrl}/uploads/gergi/optometry/macular-and-retinal-diseases.webp`, label: "Macular and Retinal Diseases", author: "Author : Al Solis", publicationYear: "Publication Year : 2021" },
         { imageSrc: `${baseUrl}/uploads/gergi/optometry/Atlas-and-Clinical-Reference-Guide-for-Corneal-Topography.webp`, label: "Atlas and Clinical Reference Guide for Corneal Topography", author: "Author : Federex Potolin", publicationYear: "Publication Year : 2021" },
+        { imageSrc: `${baseUrl}/uploads/gergi/optometry/ophthalmology-current-and-future-developments-vol-3.webp`, label: "Ophthalmology: Current and Future Developments (Vol. 3)", author: "Author : WebMaster", publicationYear: "Publication Year : 2021" },
+        { imageSrc: `${baseUrl}/uploads/gergi/optometry/macular-and-retinal-diseases.webp`, label: "Macular and Retinal Diseases", author: "Author : Al Solis", publicationYear: "Publication Year : 2021" },
+        { imageSrc: `${baseUrl}/uploads/gergi/optometry/Atlas-and-Clinical-Reference-Guide-for-Corneal-Topography.webp`, label: "Atlas and Clinical Reference Guide for Corneal Topography", author: "Author : Federex Potolin", publicationYear: "Publication Year : 2021" },
+        { imageSrc: `${baseUrl}/uploads/gergi/optometry/ophthalmology-current-and-future-developments-vol-3.webp`, label: "Ophthalmology: Current and Future Developments (Vol. 3)", author: "Author : WebMaster", publicationYear: "Publication Year : 2021" },
+        { imageSrc: `${baseUrl}/uploads/gergi/optometry/macular-and-retinal-diseases.webp`, label: "Macular and Retinal Diseases", author: "Author : Al Solis", publicationYear: "Publication Year : 2021" },
+        { imageSrc: `${baseUrl}/uploads/gergi/optometry/Atlas-and-Clinical-Reference-Guide-for-Corneal-Topography.webp`, label: "Atlas and Clinical Reference Guide for Corneal Topography", author: "Author : Federex Potolin", publicationYear: "Publication Year : 2021" },
         { imageSrc: `${baseUrl}/uploads/gergi/optometry/ophthalmology-current-and-future-developments-vol-3.webp`, label: "Ophthalmology: Current and Future Developments (Vol. 3)", author: "Author : WebMaster", publicationYear: "Publication Year : 2021" }
         // Add more items as needed
     ];

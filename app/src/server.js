@@ -57,6 +57,16 @@ app.use(
         ],
     }),
 );
+
+app.use((req, res, next) => {
+    res.setHeader('Access-Control-Allow-Origin', 'https://www.gergi.ph');
+    res.setHeader('Access-Control-Allow-Origin', 'https://gergi.ph');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+    res.setHeader('Access-Control-Allow-Credentials', true);
+    next();
+});
+
 //app.use(cors()); // Enable All CORS Requests for all origins
 
 app.use(compression()); // Compress all HTTP responses using GZip

@@ -74,15 +74,18 @@
         <div class="container relative text-center">
             <div class="grid items-center md:grid-cols-2">
                 <div class="text-center md:text-start">
-                    <p class="mb-0">© <script>document.write(new Date().getFullYear())</script> GERGI. Design with <i class="text-red-600 mdi mdi-heart"></i> by <a href="/" target="_blank" class="text-reset">GERGI</a>.</p>
+                    <p class="mb-0">
+                        © <script>document.write(new Date().getFullYear())</script> 
+                        <a href="/" target="_blank" class="text-reset">GERGI.</a>
+                        Made with <i class="text-red-600 mdi mdi-heart"></i> &amp; lots of coffee.</p>
                 </div>
 
                 <ul class="mt-6 text-center list-none md:text-end md:mt-0">
-                    <li class="inline"><a href="/"><img src="assets_2/images/payments/american-ex.png" class="inline max-h-6" title="American Express" alt=""></a></li>
-                    <li class="inline"><a href="/"><img src="assets_2/images/payments/discover.png" class="inline max-h-6" title="Discover" alt=""></a></li>
-                    <li class="inline"><a href="/""><img src="assets_2/images/payments/master-card.png" class="inline max-h-6" title="Master Card" alt=""></a></li>
-                    <li class="inline"><a href="/"><img src="assets_2/images/payments/paypal.png" class="inline max-h-6" title="Paypal" alt=""></a></li>
-                    <li class="inline"><a href="/"><img src="assets_2/images/payments/visa.png" class="inline max-h-6" title="Visa" alt=""></a></li>
+                    <li class="inline"><a href="/"><img src="<%= process.env.GERGI_HOSTNAME %>assets_2/images/payments/american-ex.png" class="inline max-h-6" title="American Express" alt=""></a></li>
+                    <li class="inline"><a href="/"><img src="<%= process.env.GERGI_HOSTNAME %>assets_2/images/payments/discover.png" class="inline max-h-6" title="Discover" alt=""></a></li>
+                    <li class="inline"><a href="/""><img src="<%= process.env.GERGI_HOSTNAME %>assets_2/images/payments/master-card.png" class="inline max-h-6" title="Master Card" alt=""></a></li>
+                    <li class="inline"><a href="/"><img src="<%= process.env.GERGI_HOSTNAME %>assets_2/images/payments/paypal.png" class="inline max-h-6" title="Paypal" alt=""></a></li>
+                    <li class="inline"><a href="/"><img src="<%= process.env.GERGI_HOSTNAME %>assets_2/images/payments/visa.png" class="inline max-h-6" title="Visa" alt=""></a></li>
                 </ul>
             </div><!--end grid-->
         </div><!--end container-->

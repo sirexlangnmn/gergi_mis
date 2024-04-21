@@ -15,12 +15,6 @@ module.exports = (sequelize, Sequelize) => {
         department_id: {
             type: Sequelize.STRING,
         },
-        organization_id: {
-            type: Sequelize.STRING,
-        },
-        classification_id: {
-            type: Sequelize.STRING,
-        },
     });
 
     return Resource_setups;

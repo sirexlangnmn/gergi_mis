@@ -41,6 +41,10 @@ exports.getCoursesByDepartment = async (req, res) => {
 
         if (!departmentData) { return res.status(404).json({ error: 'Department not found' }); }
 
+        // mag session dito ng department_id
+        req.session.department_id = departmentData.id;
+        req.session.department_title = departmentData.title;
+
         const coursesData = await Courses.findAll({
             where: { department_id: departmentData.id },
         });

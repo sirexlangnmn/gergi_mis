@@ -424,6 +424,8 @@ app.get('/courses/:departmentValue', (req, res) => {
             departmentValue: departmentValue,
         };
 
+        // req.session.user = sessionData
+
         res.render(path.join(__dirname, '../../', 'public/view/courses/courses'), {
             data: sessionData,
         });
@@ -433,9 +435,26 @@ app.get('/courses/:departmentValue', (req, res) => {
 });
 
 
-app.get('/resources', (req, res) => {
+app.get('/resources/:courseValue', (req, res) => {
 
-    res.render(path.join(__dirname, '../../', 'public/view/resources/resources'));
+    const courseValue = req.params.courseValue;
+
+    if (courseValue) {
+        const sessionData = {
+            fullName: req.session.user.name,
+            organizationId: req.session.user.organization_id,
+            departmentId: req.session.department_id,
+            departmentTitle: req.session.department_title,
+            courseValue: courseValue,
+        };
+
+
+        res.render(path.join(__dirname, '../../', 'public/view/resources/resources'), {
+            data: sessionData,
+        });
+    } else {
+        res.render(path.join(__dirname, '../../', 'public/view/login/login'));
+    }
 });
 
 

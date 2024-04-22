@@ -36,109 +36,77 @@ exports.search = async (req, res) => {
 
         const { searchInput, categoryInput, resourceTypeInput } = req.body;
 
-        
+        console.log('join.controller searchInput : ', searchInput);
+        console.log('join.controller categoryInput : ', categoryInput);
+        console.log('join.controller resourceTypeInput : ', resourceTypeInput);
         const searchKeyword = searchInput ? searchInput : '';
         const categoryId = categoryInput ? categoryInput : '';
-        const resourceType = resourceTypeInput ? resourceTypeInput : 1;
+        const resourceType = resourceTypeInput ? resourceTypeInput : '';
 
 
-        console.log('join.controller searchKeyword : ', searchKeyword);
-        console.log('join.controller categoryId : ', categoryId);
-        console.log('join.controller resourceType : ', resourceType);
+        const resourceSetupsData = await Resource_setups.findAll({
+            where: {
+                [Op.or]: [
+                    { category_id: categoryId },
+                    { resource_type: resourceType }
+                ]
+            },
+            // where: {
+            //     category_id: categoryId,
+            //     resource_type: resourceType
+            // },
+            attributes: ['resource_id'],
+            // order: Sequelize.literal('RAND()'), // for MySQL or MariaDB
+            limit: 20
+        });
 
-        // const resourceSetupsData = await Resource_setups.findAll({
-        //     where: {
-        //         [Op.or]: [
-        //             { category_id: categoryId },
-        //             { resource_type: resourceType }
-        //         ]
-        //     },
-        //     attributes: ['resource_id'],
-        //     limit: 20
-        // });
-
-
-       
-
-
-        let resourceData;
-        if (searchKeyword && categoryId && resourceType) {
-            const resourceSetupsData = await Resource_setups.findAll({
-                where: {
-                    category_id: categoryId,
-                    resource_type: resourceType
-                },
-                attributes: ['resource_id'],
-                limit: 20
-            });
+        if (!resourceSetupsData) { return res.status(404).json({ error: 'resourceSetupsData not found' }); }
+        //console.log('join.controller.js resourceSetupsData : ', resourceSetupsData);
 
 
-            if (!resourceSetupsData) { return res.status(404).json({ error: 'resourceSetupsData not found' }); }
-            //console.log('join.controller.js resourceSetupsData : ', resourceSetupsData);
+        const resourceSetupIds = resourceSetupsData.map(resourceSetup => resourceSetup.resource_id);
+        if (!resourceSetupIds) { return res.status(404).json({ error: 'resourceSetupIds not found' }); }
+        // console.log('resourceSetups.controller.js resourceSetupIds : ', resourceSetupIds);
+     
 
-
-            const resourceSetupIds = resourceSetupsData.map(resourceSetup => resourceSetup.resource_id);
-            if (!resourceSetupIds) { return res.status(404).json({ error: 'resourceSetupIds not found' }); }
-            // console.log('resourceSetups.controller.js resourceSetupIds : ', resourceSetupIds);
-
-
-            resourceData = await Resources.findAll({
-                where: {
-                    [Op.or]: [
-                        { resource_id: resourceSetupIds },
-                        { title: { [Op.like]: `%` + searchKeyword + `%` } },
-                        { ISBN: { [Op.like]: `%` + searchKeyword + `%` } }
-                    ]
-                },
-                order: Sequelize.literal('RAND()')
-            });
-        }
-
-        if (!searchKeyword && categoryId && resourceType) {
-            const resourceSetupsData = await Resource_setups.findAll({
-                where: {
-                    category_id: categoryId,
-                    resource_type: resourceType
-                },
-                attributes: ['resource_id'],
-                limit: 20
-            });
-
-
-            if (!resourceSetupsData) { return res.status(404).json({ error: 'resourceSetupsData not found' }); }
-            //console.log('join.controller.js resourceSetupsData : ', resourceSetupsData);
-
-
-            const resourceSetupIds = resourceSetupsData.map(resourceSetup => resourceSetup.resource_id);
-            if (!resourceSetupIds) { return res.status(404).json({ error: 'resourceSetupIds not found' }); }
-            // console.log('resourceSetups.controller.js resourceSetupIds : ', resourceSetupIds);
-
-            resourceData = await Resources.findAll({
-                where: {
-                    resource_id: resourceSetupIds,
-                },
-                order: Sequelize.literal('RAND()')
-            });
-        }
-
-        if (searchKeyword && !categoryId && resourceType) {
-            resourceData = await Resources.findAll({
-                where: {
-                    [Op.or]: [
-                        { title: { [Op.like]: `%` + searchKeyword + `%` } },
-                        { ISBN: { [Op.like]: `%` + searchKeyword + `%` } }
-                    ]
-                },
-                order: Sequelize.literal('RAND()')
-            });
-        }
-
+        const resourceData = await Resources.findAll({ where: { resource_id: resourceSetupIds } });
         if (!resourceData) { return res.status(404).json({ error: 'resourceData not found' }); }
-        // console.log('resourceSetups.controller.js resourceData : ', resourceData);
+        console.log('resourceSetups.controller.js resourceData : ', resourceData);
 
         res.json(resourceData);
 
+        // const departmentData = await Departments.findOne({
+        //     where: {
+        //         title: departmentTitle,
+        //         organization_id: organizationId
+        //     }
+        // });
 
+        // if (!departmentData) { return res.status(404).json({ error: 'Department not found' }); }
+
+        // // mag session dito ng department_id
+        // req.session.department_id = departmentData.id;
+        // req.session.department_title = departmentData.title;
+
+        // const coursesData = await Courses.findAll({
+        //     where: { department_id: departmentData.id },
+        // });
+
+
+        // const courseTitleIds = coursesData.map(course => course.course_title_id);
+
+
+        // const courseTitlesData = await Course_titles.findAll({
+        //     where: { id: courseTitleIds }
+        // });
+
+
+        // const courseTitles = courseTitlesData.map(courseTitle => courseTitle.title);
+
+
+        // if (!courseTitles) { return res.status(404).json({ error: 'Course Titles not found' }); }
+
+        // res.json(courseTitles);
     } catch (error) {
         console.error('Error in search:', error);
 

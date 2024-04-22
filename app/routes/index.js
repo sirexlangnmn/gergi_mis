@@ -10,6 +10,7 @@ module.exports = (app) => {
     const usersController = controllers.users;
     const coursesController = controllers.courses;
     const resourceSetups = controllers.resourceSetups;
+    const categories = controllers.categories;
 
     app.get(['/api/v1/get/resources/pdf'], resourcesController.pdf);
     app.post(['/api/get/departments-by-organization'], departmentsController.getDepartmentsByOrganization);
@@ -17,6 +18,9 @@ module.exports = (app) => {
     app.post(['/api/post/login'], usersController.login);
     app.post(['/api/get/courses-by-department'], coursesController.getCoursesByDepartment);
     app.post(['/api/get/resources-by-course'], resourceSetups.getResourcesByCourse);
+    app.post(['/api/get/categories-by-course'], categories.getCategoriesByCourse);
+    app.post(['/api/get/search-resources'], joinController.search);
+    
 
 
 

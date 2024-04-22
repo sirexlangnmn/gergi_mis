@@ -1,9 +1,9 @@
 module.exports = (sequelize, Sequelize) => {
     const Categories = sequelize.define('categories', {
-        category_id: {
+        title: {
             type: Sequelize.STRING,
         },
-        title: {
+        sub_category_id: {
             type: Sequelize.STRING,
         },
         course_id: {

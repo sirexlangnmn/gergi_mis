@@ -53,7 +53,9 @@ displayResources().then((data) => {
                     <li class="mt-1"><a href="javascript:void(0)" class="inline-flex items-center justify-center text-base tracking-wide text-center text-white align-middle duration-500 bg-indigo-600 border-indigo-600 rounded-full size-8 hover:bg-indigo-700 hover:border-indigo-700"><i class="mdi mdi-bookmark-outline"></i></a></li>
                 </ul>
                 <ul class="list-none absolute top-[10px] start-4">
-                    <li><a href="javascript:void(0)" class="bg-orange-600 text-white text-[10px] font-bold px-2.5 py-0.5 rounded h-5">New</a></li>
+                    <li><a href="javascript:void(0)" class="bg-orange-600 text-white text-[10px] font-bold px-2.5 py-0.5 rounded h-5">
+                        ${item.category_title}
+                    </a></li>
                 </ul>
             </div>
             <div class="mt-4">
@@ -61,6 +63,7 @@ displayResources().then((data) => {
                 <div class="items-center justify-between mt-1">
                     <p class="text-gray-600">${author}</p>
                     <p class="text-gray-600">${publicationYear}</p>
+                    <p class="text-gray-600">Subject : ${item.subject_title}</p>
                 </div>
             </div>
         `;
@@ -110,11 +113,22 @@ async function displayCategories() {
             data.forEach(item => {
                 const radioButton = document.getElementById(`categoryRadio-${item.id}`);
                 radioButton.addEventListener('change', function() {
+
+                    const resourcesContainer = getId("resourcesContainer");
+                    resourcesContainer.innerHTML = '';
+
+                    // const searchData = {
+                    //     value: this.value,
+                    //     elementId: 'categoryRadio'
+                    // }
+                    // search(searchData)
+
                     const searchData = {
                         value: this.value,
                         elementId: 'categoryRadio'
-                    }
-                    search(searchData)
+                    };
+
+                    triggerSearch(searchData);
                 });
             });
 
@@ -126,6 +140,19 @@ async function displayCategories() {
         const errorMessage = error || 'An error occurred with the fetch operation';
         console.log('There was a problem with the fetch operation:', errorMessage);
     }
+}
+
+
+// Function to clean the resourcesContainer
+function cleanResourcesContainer() {
+    const resourcesContainer = getId("resourcesContainer");
+    resourcesContainer.innerHTML = '';
+}
+
+// Function to trigger search after cleaning
+function triggerSearch(searchData) {
+    cleanResourcesContainer(); // Clean the resourcesContainer
+    search(searchData); // Trigger the search
 }
 
 
@@ -190,6 +217,9 @@ let searchInput, searchInputOld, categoryInput, categoryInputOld, resourceTypeIn
 
 async function search(searchData) {
 
+    const resourcesContainer = getId("resourcesContainer");
+    resourcesContainer.innerHTML = '';
+
     if (searchData.elementId === 'searchInput') {
         searchInput = searchData.value;
         searchInputOld = searchData.value;
@@ -232,6 +262,8 @@ async function search(searchData) {
         }
         const data = await response.json();
 
+        console.log('frontend search : ', data);
+
         const resourcesContainer = getId("resourcesContainer");
         resourcesContainer.innerHTML = '';
 
@@ -255,7 +287,9 @@ async function search(searchData) {
                         <li class="mt-1"><a href="javascript:void(0)" class="inline-flex items-center justify-center text-base tracking-wide text-center text-white align-middle duration-500 bg-indigo-600 border-indigo-600 rounded-full size-8 hover:bg-indigo-700 hover:border-indigo-700"><i class="mdi mdi-bookmark-outline"></i></a></li>
                     </ul>
                     <ul class="list-none absolute top-[10px] start-4">
-                        <li><a href="javascript:void(0)" class="bg-orange-600 text-white text-[10px] font-bold px-2.5 py-0.5 rounded h-5">New</a></li>
+                        <li><a href="javascript:void(0)" class="bg-orange-600 text-white text-[10px] font-bold px-2.5 py-0.5 rounded h-5">
+                        ${item.category_title}
+                        </a></li>
                     </ul>
                 </div>
                 <div class="mt-4">
@@ -263,6 +297,7 @@ async function search(searchData) {
                     <div class="items-center justify-between mt-1">
                         <p class="text-gray-600">${author}</p>
                         <p class="text-gray-600">${publicationYear}</p>
+                        <p class="text-gray-600">Subject : ${item.subject_title}</p>
                     </div>
                 </div>
             `;

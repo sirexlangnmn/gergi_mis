@@ -37,8 +37,8 @@ exports.getResourcesByCourse = async (req, res) => {
     try {
         const courseTitle = req.body.course;
         try {
-            let query = QUERY.getResources3
-            query += ` WHERE ct.title = '${courseTitle}'`;
+            let query = QUERY.getResources
+            // query += ` WHERE st.title = '${courseTitle}'`;
             query += ` ORDER BY RAND()`;
             query += ` LIMIT 20;`;
 

@@ -38,6 +38,7 @@ module.exports = (app) => {
 
 
         const sql = 'INSERT INTO resources (resource_id, title, url_link, ISBN, image, createdAt, updatedAt) VALUES (?, ?, ?, ?, ?, ?, ?)';
+
         const values = [
             inputData.resource_id,
             inputData.title,

@@ -1,0 +1,103 @@
+<%- include('../includes/head/head.ejs') %>
+
+<body class="text-base text-black font-nunito dark:text-white dark:bg-slate-900">
+
+<%- include('../includes/nav/nav.ejs') %>
+
+
+<!-- Start -->
+<section class="relative py-16 md:py-24">
+    <div class="container">
+        <div class="grid lg:grid-cols-12 md:grid-cols-2 grid-cols-1 gap-[30px]">
+            <div class="lg:col-span-3 md:col-span-5">
+                <div class="flex items-center">
+                    <img src="assets_2/images/client/05.jpg" class="rounded-full shadow size-16 dark:shadow-gray-800" alt="">
+                    <div class="ms-2">
+                        <p class="font-semibold text-slate-400">Hello,</p>
+                        <h5 class="text-lg font-semibold">Federex Potolin</h5>
+                    </div>
+                </div>
+            </div><!--end col-->
+
+            <div class="lg:col-span-9 md:col-span-7">
+                <p class="max-w-xl text-slate-400"></p>
+            </div><!--end col-->
+
+            <div class="lg:col-span-3 md:col-span-5">
+                <div class="sticky top-20">
+                    <ul class="p-6 bg-white rounded-md shadow flex-column dark:bg-slate-900 dark:shadow-gray-800" id="myTab" data-tabs-toggle="#myTabContent" role="tablist">
+                        <li role="presentation">
+                            <button class="w-full px-4 py-2 mt-3 text-base font-semibold duration-500 rounded-md text-start" id="accountdetail-tab" data-tabs-target="#accountdetail" type="button" role="tab" aria-controls="accountdetail" aria-selected="false"><i class="uil uil-book text-[20px] me-2 align-middle"></i>Add Book</button>
+                        </li>
+                        <li role="presentation">
+                            <a href="auth-login.html" class="w-full px-4 py-2 mt-3 text-base font-semibold duration-500 rounded-md text-start hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-indigo-600 dark:hover:text-white" type="button"><i class="uil uil-sign-out-alt text-[20px] me-2 align-middle"></i> Logout</a>
+                        </li>
+                    </ul>
+                </div>
+            </div><!--end col-->
+
+            <div class="lg:col-span-9 md:col-span-7">
+                <div id="myTabContent" class="p-6 bg-white rounded-md shadow dark:bg-slate-900 dark:shadow-gray-800">
+                    <div class="hidden" id="accountdetail" role="tabpanel" aria-labelledby="accountdetail-tab">
+                        <h5 class="mb-4 text-lg font-semibold">Add Resources :</h5>
+                        <form action="javascript:void(0);" class="text-start" method="POST" id="addBookForm" name="addBookForm" enctype="multipart/form-data" accept-charset="utf-8">
+                            <div class="grid grid-cols-1 gap-5 lg:grid-cols-2">
+                                <div>
+                                    <label class="font-medium form-label">
+                                        Title
+                                        <span class="text-red-600">*</span>
+                                    </label>
+                                    <div class="relative mt-2 form-icon">
+                                        <input type="text" class="w-full h-10 px-3 py-2 bg-transparent border border-gray-200 rounded outline-none form-input ps-12 dark:bg-slate-900 dark:text-slate-200 focus:border-indigo-600 dark:border-gray-800 dark:focus:border-indigo-600 focus:ring-0" placeholder="" id="title" name="title" required="">
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="font-medium form-label">
+                                        Download Link
+                                        <span class="text-red-600">*</span>
+                                    </label>
+                                    <div class="relative mt-2 form-icon">
+                                        <input type="text" class="w-full h-10 px-3 py-2 bg-transparent border border-gray-200 rounded outline-none form-input ps-12 dark:bg-slate-900 dark:text-slate-200 focus:border-indigo-600 dark:border-gray-800 dark:focus:border-indigo-600 focus:ring-0" placeholder="" id="download_link" name="download_link" required="">
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="font-medium form-label">
+                                        ISBN
+                                        <span class="text-red-600">*</span>
+                                    </label>
+                                    <div class="relative mt-2 form-icon">
+                                        <input type="text" class="w-full h-10 px-3 py-2 bg-transparent border border-gray-200 rounded outline-none form-input ps-12 dark:bg-slate-900 dark:text-slate-200 focus:border-indigo-600 dark:border-gray-800 dark:focus:border-indigo-600 focus:ring-0" placeholder="" id="isbn" name="isbn" required="">
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="font-medium form-label">
+                                        Image
+                                        <span class="text-red-600">*</span>
+                                    </label>
+                                    <div class="relative mt-2 form-icon">
+                                        <input type="file" class="w-full h-10 px-3 py-2 bg-transparent border border-gray-200 rounded outline-none form-input ps-12 dark:bg-slate-900 dark:text-slate-200 focus:border-indigo-600 dark:border-gray-800 dark:focus:border-indigo-600 focus:ring-0" placeholder="" id="file" name="file" required="">
+                                    </div>
+                                </div>
+                            </div><!--end grid-->
+                            <input type="submit" id="submit" name="submit" class="inline-block px-5 py-2 mt-5 text-base font-semibold tracking-wide text-center text-white align-middle duration-500 bg-indigo-600 border border-indigo-600 rounded-md hover:bg-indigo-700 hover:border-indigo-700" value="Save">
+                        </form><!--end form-->
+                    </div>
+                </div>
+            </div><!--end col-->
+        </div><!--end grid-->
+    </div><!--end container-->
+</section><!--end section-->
+<!-- End -->
+
+
+<%- include('../includes/start_cookie_popup/start_cookie_popup.ejs') %>
+
+<%- include('../includes/back_to_top/back_to_top.ejs') %>
+
+<%- include('../includes/switcher/switcher.ejs') %>
+
+<%- include('../includes/ltr_and_rtl_mode/ltr_and_rtl_mode.ejs') %>
+
+<script src="<%= process.env.GERGI_HOSTNAME %>javascript/admin_add_resources.js"></script>
+
+<%- include('../includes/script/script.ejs') %>

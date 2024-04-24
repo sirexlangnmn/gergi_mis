@@ -47,6 +47,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const cookieSession = require('cookie-session');
+const multer = require('multer');
 const path = require('path');
 const app = express();
 
@@ -134,7 +135,7 @@ const api_key_secret = process.env.API_KEY_SECRET;
 
 require('../routes/index.js')(app);
 // require('../routes/password.js')(app);
-// require('../routes/upload-file.js')(app);
+require('../routes/upload-file.js')(app);
 // require('../routes/forgot-password.js')(app);
 
 const pdfService = require('../service/pdf-service');
@@ -199,11 +200,39 @@ const classificationsJson = readFileSync(path.join(__dirname, '../../', 'public/
 const organizationsJson = readFileSync(path.join(__dirname, '../../', 'public/references/organizations.json'));
 
 
+
+
+// // Multer configuration for handling file uploads
+// const storage = multer.diskStorage({
+//     destination: function (req, file, cb) {
+//       cb(null, './uploads'); // Uploads will be stored in the 'uploads' directory
+//     },
+//     filename: function (req, file, cb) {
+//       cb(null, Date.now() + '-' + file.originalname); // Appending timestamp to filename to avoid overwriting
+//     }
+//   });
+
+//   const upload = multer({ storage: storage });
+
+//   // Serve static files from the 'public' directory
+//   app.use(express.static(path.join(__dirname, 'public')));
+
+
+
+// // Handle form submission
+// app.post('/add-resources', upload.single('file'), (req, res) => {
+//     const { title, download_link, isbn } = req.body;
+//     const file = req.file;
+
+//     // Perform database insertion or any other required operations with the form data and file
+
+//     res.json({ message: 'Form submitted successfully', data: { title, download_link, isbn, file } });
+// });
+
 // home
 app.get(['/'], (req, res) => {
     if (req.session.user === undefined) {
         const sessionData = {
-            uuid: '',
             type: '',
             first_name: '',
             last_name: '',
@@ -218,7 +247,6 @@ app.get(['/'], (req, res) => {
         });
     } else {
         const sessionData = {
-            uuid: req.session.user.uuid,
             type: req.session.user.type,
             first_name: req.session.user.first_name,
             last_name: req.session.user.last_name,
@@ -239,7 +267,6 @@ app.get(['/'], (req, res) => {
 // app.get(['/library'], (req, res) => {
 //     if (req.session.user === undefined) {
 //         const sessionData = {
-//             uuid: '',
 //             type: '',
 //             first_name: '',
 //             last_name: '',
@@ -254,7 +281,6 @@ app.get(['/'], (req, res) => {
 //         });
 //     } else {
 //         const sessionData = {
-//             uuid: req.session.user.uuid,
 //             type: req.session.user.type,
 //             first_name: req.session.user.first_name,
 //             last_name: req.session.user.last_name,
@@ -344,7 +370,6 @@ app.get('/about-us', (req, res) => {
 app.get('/registration', (req, res) => {
     if (req.session.user === undefined) {
         const sessionData = {
-            uuid: '',
             type: '',
             first_name: '',
             last_name: '',
@@ -359,7 +384,6 @@ app.get('/registration', (req, res) => {
         });
     } else {
         const sessionData = {
-            uuid: req.session.user.uuid,
             type: req.session.user.type,
             first_name: req.session.user.first_name,
             last_name: req.session.user.last_name,
@@ -378,7 +402,6 @@ app.get('/registration', (req, res) => {
 app.get('/login', (req, res) => {
     if (req.session.user === undefined) {
         const sessionData = {
-            uuid: '',
             type: '',
             first_name: '',
             last_name: '',
@@ -393,7 +416,6 @@ app.get('/login', (req, res) => {
         });
     } else {
         const sessionData = {
-            uuid: req.session.user.uuid,
             type: req.session.user.type,
             first_name: req.session.user.first_name,
             last_name: req.session.user.last_name,
@@ -412,20 +434,26 @@ app.get('/login', (req, res) => {
 
 
 app.get('/departments', (req, res) => {
+    const sessionData = {
+        name: req.session.user.name,
+        email: req.session.user.email,
+        user_type: req.session.user.user_type,
+        organization_id: req.session.user.organization_id,
+    };
 
    if (req.session.user === undefined) {
         res.render(path.join(__dirname, '../../', 'public/view/login/login'));
-    } else {
-        const sessionData = {
-            uuid: req.session.user.uuid,
-            organization_id: req.session.user.organization_id,
-        };
-
+    } else if (parseInt(req.session.user.user_type) === 1) {
+        res.render(path.join(__dirname, '../../', 'public/view/admin_add_resources/admin_add_resources'), {
+            data: sessionData,
+        });
+    }  else if (parseInt(req.session.user.user_type) === 2) {
         res.render(path.join(__dirname, '../../', 'public/view/departments/departments'), {
             data: sessionData,
         });
     }
 });
+
 
 app.get('/courses/:departmentValue', (req, res) => {
 
@@ -468,6 +496,33 @@ app.get('/resources/:courseValue', (req, res) => {
         res.render(path.join(__dirname, '../../', 'public/view/login/login'));
     }
 });
+
+
+
+app.get('/admin/add-resources', (req, res) => {
+
+    const courseValue = req.params.courseValue;
+
+    if (courseValue) {
+        const sessionData = {
+            fullName: req.session.user.name,
+            organizationId: req.session.user.organization_id,
+            departmentId: req.session.department_id,
+            departmentTitle: req.session.department_title,
+            courseValue: courseValue,
+        };
+
+        res.render(path.join(__dirname, '../../', 'public/view/admin_add_resources/admin_add_resources'), {
+            data: sessionData,
+        });
+    } else {
+        res.render(path.join(__dirname, '../../', 'public/view/login/login'));
+    }
+});
+
+
+
+
 
 
 app.get('/logout', function (req, res, next) {

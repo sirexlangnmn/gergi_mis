@@ -20,7 +20,6 @@ module.exports = (app) => {
     app.post(['/api/get/resources-by-course'], resourceSetups.getResourcesByCourse);
     app.post(['/api/get/categories-by-course'], categories.getCategoriesByCourse);
     app.post(['/api/get/search-resources'], joinController.search);
-    
 
 
 

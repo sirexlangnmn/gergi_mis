@@ -12,12 +12,23 @@ module.exports = (app) => {
             cb(null, './uploads');
         },
         filename: function (req, file, cb) {
-            const title = req.body.title.replace(/\s+/g, '-').toLowerCase();
+            const title = req.body.title.replace(/\s+/g, '-').toLowerCase() || req.body.update_title.replace(/\s+/g, '-').toLowerCase();;
+            cb(null, `${title}-${Date.now()}-${file.originalname}`);
+        }
+    });
+
+    const storage2 = multer.diskStorage({
+        destination: function (req, file, cb) {
+            cb(null, './uploads');
+        },
+        filename: function (req, file, cb) {
+            const title = req.body.update_title.replace(/\s+/g, '-').toLowerCase();;
             cb(null, `${title}-${Date.now()}-${file.originalname}`);
         }
     });
 
     const upload = multer({ storage: storage });
+    const upload2 = multer({ storage: storage2 });
 
     app.use(express.static(path.join(__dirname, 'public')));
 
@@ -58,5 +69,41 @@ module.exports = (app) => {
             res.json({ message: 'Form submitted successfully', data: { title, download_link, isbn, filename } });
         });
     });
+
+    app.post('/api/update/resources', upload2.single('update_file'), (req, res) => {
+        const { update_id, update_title, update_download_link, update_isbn } = req.body;
+        const filename = req.file.filename;
+
+        const inputData = {
+            title: update_title,
+            url_link: update_download_link,
+            ISBN: update_isbn,
+            image: filename,
+            updatedAt: new Date().toISOString().slice(0, 19).replace('T', ' '),
+            id: update_id
+        };
+
+
+        const sql = 'UPDATE resources SET title = ?, url_link = ?, ISBN = ?, image = ?, updatedAt = ? WHERE id = ?';
+
+        const values = [
+            inputData.title,
+            inputData.url_link,
+            inputData.ISBN,
+            inputData.image,
+            inputData.updatedAt,
+            inputData.id
+        ];
+
+        db.query(sql, values, (err, result) => {
+            if (err) {
+                console.log('Error updating data:', err);
+                return res.json({ message: 'Error updating data in database' });
+            }
+            console.log('Data updated successfully');
+            res.json({ message: 'Resource updated successfully', data: inputData });
+        });
+    });
+
 
 };

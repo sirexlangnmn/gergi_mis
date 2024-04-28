@@ -1,6 +1,9 @@
 const { v4: uuidV4 } = require('uuid');
 const { check, validationResult } = require('express-validator');
 
+const sql = require('../models/db.js');
+const QUERY = require('../query/join.query.js');
+
 const db = require('../models');
 const sequelizeConfig = require('../config/sequelize.config.js');
 
@@ -64,6 +67,49 @@ exports.getCoursesByDepartment = async (req, res) => {
         if (!courseTitles) { return res.status(404).json({ error: 'Course Titles not found' }); }
 
         res.json(courseTitles);
+    } catch (error) {
+        console.error('Error in getCoursesByDepartment:', error);
+
+        return res.status(500).json({ error: 'Internal server error' });
+    }
+
+};
+
+
+
+exports.getCoursesByDepartmentId = async (req, res) => {
+    const errors = validationResult(req);
+
+    try {
+        if (!errors.isEmpty()) {
+            return res.status(200).send({
+                message: errors.array(),
+            });
+        }
+    } catch (error) {
+        return res.status(400).json({
+            error: {
+                message: error,
+            },
+        });
+    }
+
+    try {
+
+        const departmentId = req.body.departmentId;
+        console.log('getCoursesByDepartmentId departmentId : ', departmentId)
+
+        let query = QUERY.getCoursesByDepartmentId
+        query += ` WHERE co.department_id = '${departmentId}'`;
+
+        sql.query(query, (err, result) => {
+            if (err) {
+                console.log('Error executing query:', err);
+                return;
+            }
+
+            res.json(result);
+        });
     } catch (error) {
         console.error('Error in getCoursesByDepartment:', error);
 

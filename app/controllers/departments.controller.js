@@ -41,3 +41,15 @@ exports.getDepartmentsByOrganization = async (req, res) => {
     }
 
 };
+
+
+exports.getAll = async (req, res) => {
+    const getRows = await Departments.findAll()
+        .then((data) => {
+            console.error('Departments : ', data);
+            res.send(data);
+        })
+        .catch((err) => {
+            return 'Some error occurred while retrieving Departments.';
+        });
+};

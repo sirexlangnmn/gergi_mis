@@ -3,6 +3,9 @@ module.exports = (sequelize, Sequelize) => {
         title: {
             type: Sequelize.STRING,
         },
+        classification_id: {
+            type: Sequelize.STRING,
+        },
     });
 
     return Organizations;

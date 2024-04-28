@@ -1,22 +1,23 @@
 const departmentsReference = [
     {
         "id": 1,
-        "title": "Medicine",
-        "organization_id": 1
+        "title": "College of Optometry",
+        "organization_id": "1",
+        "createdAt": "2024-04-14T17:36:57.000Z",
+        "updatedAt": "2024-04-14T17:36:57.000Z"
     },
     {
         "id": 2,
-        "title": "Sample Department for Government Agencies",
-        "organization_id": 2
+        "title": "IT Department",
+        "organization_id": "1",
+        "createdAt": "2024-04-14T17:36:57.000Z",
+        "updatedAt": "2024-04-14T17:36:57.000Z"
     },
     {
         "id": 3,
-        "title": "Sample Department for Private Sectors",
-        "organization_id": 3
-    },
-    {
-        "id": 4,
-        "title": "Sample Department for Public Sectors",
-        "organization_id": 4
+        "title": "Engineering Department",
+        "organization_id": "1",
+        "createdAt": "2024-04-14T18:19:56.000Z",
+        "updatedAt": "2024-04-14T18:19:56.000Z"
     }
 ]

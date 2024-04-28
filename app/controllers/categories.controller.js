@@ -52,3 +52,38 @@ exports.getCategoriesByCourse = async (req, res) => {
     }
 
 };
+
+
+
+exports.getCategoriesByCourseId = async (req, res) => {
+    const errors = validationResult(req);
+
+    try {
+        if (!errors.isEmpty()) {
+            return res.status(200).send({
+                message: errors.array(),
+            });
+        }
+    } catch (error) {
+        return res.status(400).json({
+            error: {
+                message: error,
+            },
+        });
+    }
+
+    try {
+        const courseId = req.body.courseId;
+
+        const categoriesData = await Categories.findAll({ where: { course_id: courseId }, attributes: ['id','title'] });
+
+        if (!categoriesData) { return res.status(404).json({ error: 'Categories not found' }); }
+
+        res.json(categoriesData);
+    } catch (error) {
+        console.error('Error in getDepartmentsByOrganization:', error);
+
+        return res.status(500).json({ error: 'Internal server error' });
+    }
+
+};

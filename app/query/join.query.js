@@ -61,6 +61,26 @@ const QUERY = {
         LEFT JOIN
             course_titles ct ON co.course_title_id = ct.id
     `,
+
+    getCoursesByDepartmentId: `
+        SELECT
+            co.*,
+            ct.title as course_title
+        FROM
+            courses co
+        LEFT JOIN
+            course_titles ct ON co.course_title_id = ct.id
+    `,
+
+    getSubjectsByCategoryId: `
+        SELECT
+            su.*,
+            st.title as subject_title
+        FROM
+            subjects su
+        LEFT JOIN
+            subject_titles st ON su.subject_title_id = st.id
+    `,
 }
 
 // export default QUERY;

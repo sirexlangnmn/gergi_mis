@@ -15,21 +15,6 @@ let editResourcesErrorMessage = getId('editResourcesErrorMessage');
 let editResourcesForm = getId('editResourcesForm');
 
 
-
-let classificationSelect = getId('classificationData');
-let organizationSelect = getId('organizationData');
-let departmentSelect = getId('departmentData');
-let courseSelect = getId('courseData');
-let categorySelect = getId('categoryData');
-let subjectSelect = getId('subjectData');
-
-
-
-let resourceSetupSuccessMessage = getId('resourceSetupSuccessMessage');
-let resourceSetupErrorMessage = getId('resourceSetupErrorMessage');
-
-
-
 function validateAddBookForm() {
     title = title.value;
 
@@ -137,7 +122,7 @@ function generateTableRows(data) {
                 <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="currentColor" d="M20.71 4.04c.39-.39.39-1.04 0-1.41L18.37.29C18-.1 17.35-.1 16.96.29L15 2.25L18.75 6m-1 1L14 3.25l-10 10V17h3.75z"/></svg>
                 </a>
 
-                <a href="javascript:void(0);" onclick="resourceSetupFormDiv('${item.resource_id}', '${item.title}')" class="size-9 inline-flex items-center justify-center tracking-wide align-middle duration-500 text-base text-center rounded-md border bg-transparent hover:bg-indigo-600 border-indigo-600 text-indigo-600 hover:text-white">
+                <a href="javascript:void(0);" onclick="resourceSetupFormDiv(${item.id}, '${item.title}')" class="size-9 inline-flex items-center justify-center tracking-wide align-middle duration-500 text-base text-center rounded-md border bg-transparent hover:bg-indigo-600 border-indigo-600 text-indigo-600 hover:text-white">
                 <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="currentColor" d="M15 20a1 1 0 0 0-1-1h-1v-2h4a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h4v2h-1a1 1 0 0 0-1 1H2v2h7a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1h7v-2zm-6.75-9.92l1.16-1.16L11 10.5l3.59-3.58l1.16 1.41L11 13.08z"/></svg>
                 </a>
 
@@ -274,6 +259,230 @@ editResourcesForm.addEventListener('submit', function (event) {
 
 
 
+function populateOrganizations(classificationId) {
+    const organizationSelect = document.getElementById('organizationData');
+    organizationSelect.innerHTML = '';
+    const departmentSelect = document.getElementById('departmentData');
+    departmentSelect.innerHTML = '';
+
+    const filteredOrganizations = organizationsReference.filter(org => parseInt(org.classification_id) === parseInt(classificationId));
+
+    filteredOrganizations.forEach(org => {
+        const option = document.createElement('option');
+        option.value = org.id;
+        option.textContent = org.title;
+        organizationSelect.appendChild(option);
+    });
+
+    populateDepartments(organizationSelect.value);
+}
+
+function populateDepartments(organizationId) {
+    const departmentSelect = document.getElementById('departmentData');
+    departmentSelect.innerHTML = '';
+
+    const filteredDepartments = departmentsReference.filter(department => parseInt(department.organization_id) === parseInt(organizationId));
+
+    if (filteredDepartments.length === 0) {
+        const noneOption = document.createElement('option');
+        noneOption.textContent = 'None';
+        departmentSelect.appendChild(noneOption);
+    } else {
+        filteredDepartments.forEach(department => {
+            const option = document.createElement('option');
+            option.value = department.id;
+            option.textContent = department.title;
+            departmentSelect.appendChild(option);
+        });
+    }
+
+    const courseDataSelect = document.getElementById('courseData');
+    courseDataSelect.innerHTML = '';
+
+    populateCourses(departmentSelect.value);
+}
+
+function populateCourses(departmentId) {
+    const courseDataSelect = document.getElementById('courseData');
+    courseDataSelect.innerHTML = '';
+
+    if (departmentId === 'None') {
+        const noneOption = document.createElement('option');
+            noneOption.textContent = 'None';
+            courseDataSelect.appendChild(noneOption);
+    } else {
+        const requestOptions = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ departmentId: departmentId })
+        };
+
+        fetch('/api/get/courses-by-department-id', requestOptions)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                const courseDataSelect = document.getElementById('courseData');
+                courseDataSelect.innerHTML = '';
+
+                data.forEach(course => {
+                    const option = document.createElement('option');
+                    option.value = course.id;
+                    option.textContent = course.course_title;
+                    courseDataSelect.appendChild(option);
+                });
+
+                populateCategories(courseDataSelect.value);
+            })
+            .catch(error => {
+                console.error('Error updating resource:', error);
+            });
+    }
+}
+
+function populateCategories(courseId) {
+    const categoryDataSelect = document.getElementById('categoryData');
+    categoryDataSelect.innerHTML = '';
+
+    if (courseId === 'None') {
+        const noneOption = document.createElement('option');
+            noneOption.textContent = 'None';
+            categoryDataSelect.appendChild(noneOption);
+    } else {
+        const requestOptions = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ courseId: courseId })
+        };
+
+        fetch('/api/get/categories-by-course-id', requestOptions)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                const categoryDataSelect = document.getElementById('categoryData');
+                categoryDataSelect.innerHTML = '';
+
+                data.forEach(category => {
+                    const option = document.createElement('option');
+                    option.value = category.id;
+                    option.textContent = category.title;
+                    categoryDataSelect.appendChild(option);
+                });
+
+                populateSubjects(categoryDataSelect.value);
+            })
+            .catch(error => {
+                console.error('Error updating resource:', error);
+            });
+    }
+}
+
+function populateSubjects(categoryId) {
+    const subjectDataSelect = document.getElementById('subjectData');
+    subjectDataSelect.innerHTML = '';
+
+    if (categoryId === 'None') {
+        const noneOption = document.createElement('option');
+            noneOption.textContent = 'None';
+            subjectDataSelect.appendChild(noneOption);
+    } else {
+         // Configure the request
+        const requestOptions = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ categoryId: categoryId })
+        };
+
+        fetch('/api/get/subjects-by-category-id', requestOptions)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json(); // Return the promise
+            })
+            .then(data => {
+                const subjectDataSelect = document.getElementById('subjectData');
+                subjectDataSelect.innerHTML = '';
+
+                data.forEach(subject => {
+                    const option = document.createElement('option');
+                    option.value = subject.id;
+                    option.textContent = subject.subject_title;
+                    subjectDataSelect.appendChild(option);
+                });
+
+            })
+            .catch(error => {
+                console.error('Error updating resource:', error);
+            });
+    }
+}
+
+
+const classificationSelect = document.getElementById('classificationData');
+const organizationSelect = document.getElementById('organizationData');
+const departmentSelect = document.getElementById('departmentData');
+const categoryDataSelect = document.getElementById('categoryData');
+
+
+classificationsReference.forEach(classification => {
+    const option = document.createElement('option');
+    option.value = classification.id;
+    option.textContent = classification.title;
+    classificationSelect.appendChild(option);
+});
+
+
+classificationSelect.addEventListener('change', function () {
+    const organizationSelect = document.getElementById('organizationData');
+    organizationSelect.innerHTML = '';
+    const departmentSelect = document.getElementById('departmentData');
+    departmentSelect.innerHTML = '';
+
+    const selectedClassificationId = parseInt(this.value);
+    populateOrganizations(selectedClassificationId);
+});
+
+
+organizationSelect.addEventListener('change', function () {
+    const selectedOrganizationId = this.value;
+    populateDepartments(selectedOrganizationId);
+});
+
+departmentSelect.addEventListener('change', function () {
+    const courseDataSelect = document.getElementById('courseData');
+    courseDataSelect.innerHTML = '';
+
+    const selectedDepartmentId = this.value;
+    populateCourses(selectedDepartmentId);
+});
+
+categoryDataSelect.addEventListener('change', function () {
+    const selectedCategoryId = this.value;
+    populateSubjects(selectedCategoryId)
+});
+
+
+const defaultClassificationId = parseInt(classificationSelect.value);
+populateOrganizations(defaultClassificationId);
+
+
+
+
+
 const resourceSetupForm = document.getElementById('resourceSetupForm');
 
 resourceSetupForm.addEventListener('submit', function (event) {
@@ -315,11 +524,9 @@ resourceSetupForm.addEventListener('submit', function (event) {
     })
     .then(data => {
         console.log('Data sent successfully:', data);
-        showSuccessMessage('Data saved successfully', resourceSetupSuccessMessage)
     })
     .catch(error => {
         console.error('There was a problem with your fetch operation:', error);
-        showErrorMessage('Data saved failed', resourceSetupErrorMessage)
     });
 });
 
@@ -327,242 +534,3 @@ resourceSetupForm.addEventListener('submit', function (event) {
 
 
 
-
-
-
-function populateOrganizations(classificationId) {
-    // const organizationSelect = document.getElementById('organizationData');
-    organizationSelect.innerHTML = '';
-    // const departmentSelect = document.getElementById('departmentData');
-    departmentSelect.innerHTML = '';
-
-    const filteredOrganizations = organizationsReference.filter(org => parseInt(org.classification_id) === parseInt(classificationId));
-
-    filteredOrganizations.forEach(org => {
-        const option = document.createElement('option');
-        option.value = org.id;
-        option.textContent = org.title;
-        organizationSelect.appendChild(option);
-    });
-
-    populateDepartments(organizationSelect.value);
-}
-
-function populateDepartments(organizationId) {
-    // const departmentSelect = document.getElementById('departmentData');
-    departmentSelect.innerHTML = '';
-
-    const filteredDepartments = departmentsReference.filter(department => parseInt(department.organization_id) === parseInt(organizationId));
-
-    if (filteredDepartments.length === 0) {
-        const noneOption = document.createElement('option');
-        noneOption.textContent = 'None';
-        departmentSelect.appendChild(noneOption);
-    } else {
-        filteredDepartments.forEach(department => {
-            const option = document.createElement('option');
-            option.value = department.id;
-            option.textContent = department.title;
-            departmentSelect.appendChild(option);
-        });
-    }
-
-    // let courseSelect = document.getElementById('courseData');
-    courseSelect.innerHTML = '';
-
-    populateCourses(departmentSelect.value);
-}
-
-function populateCourses(departmentId) {
-    // let courseDataSelect = document.getElementById('courseData');
-    courseSelect.innerHTML = '';
-
-    if (departmentId === 'None') {
-        const noneOption = document.createElement('option');
-        noneOption.textContent = 'None';
-        courseSelect.appendChild(noneOption);
-    } else {
-        const requestOptions = {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ departmentId: departmentId })
-        };
-
-        fetch('/api/get/courses-by-department-id', requestOptions)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then(data => {
-                data.forEach(course => {
-                    const option = document.createElement('option');
-                    option.value = course.id;
-                    option.textContent = course.course_title;
-                    courseSelect.appendChild(option);
-                });
-
-                console.log('populateCategories(courseSelect.value) one : ', courseSelect.value)
-                populateCategories(courseSelect.value);
-            })
-            .catch(error => {
-                console.error('Error updating resource:', error);
-            });
-    }
-}
-
-function populateCategories(courseId) {
-    console.log('populateCategories courseId two : ', courseId)
-    // let categorySelect = document.getElementById('categoryData');
-    categorySelect.innerHTML = '';
-
-    if (courseId === 'None') {
-        categorySelect.innerHTML = '';
-        const noneOption = document.createElement('option');
-        noneOption.textContent = 'None';
-        categorySelect.appendChild(noneOption);
-    } else {
-        const requestOptions = {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ courseId: courseId })
-        };
-
-        fetch('/api/get/categories-by-course-id', requestOptions)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then(data => {
-                categorySelect.innerHTML = '';
-
-                if (data.length === 0) {
-                    const noneOption = document.createElement('option');
-                    noneOption.textContent = 'None';
-                    categorySelect.appendChild(noneOption);
-                } else {
-                    data.forEach(category => {
-                        const option = document.createElement('option');
-                        option.value = category.id;
-                        option.textContent = category.title;
-                        categorySelect.appendChild(option);
-                    });
-                }
-                populateSubjects(categorySelect.value);
-            })
-            .catch(error => {
-                console.error('Error updating resource:', error);
-            });
-    }
-}
-
-function populateSubjects(categoryId) {
-    // let subjectSelect = document.getElementById('subjectData');
-    subjectSelect.innerHTML = '';
-
-    if (categoryId === 'None') {
-        const noneOption = document.createElement('option');
-        noneOption.textContent = 'None';
-        subjectSelect.appendChild(noneOption);
-    } else {
-        const requestOptions = {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ categoryId: categoryId })
-        };
-
-        fetch('/api/get/subjects-by-category-id', requestOptions)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then(data => {
-                if (data.length === 0) {
-                    const noneOption = document.createElement('option');
-                    noneOption.textContent = 'None';
-                    subjectSelect.appendChild(noneOption);
-                } else {
-                    data.forEach(subject => {
-                        const option = document.createElement('option');
-                        option.value = subject.id;
-                        option.textContent = subject.subject_title;
-                        subjectSelect.appendChild(option);
-                    });
-                }
-            })
-            .catch(error => {
-                console.error('Error updating resource:', error);
-            });
-    }
-}
-
-
-
-
-// Populate classification select options
-classificationsReference.forEach(classification => {
-    const option = document.createElement('option');
-    option.value = classification.id;
-    option.textContent = classification.title;
-    classificationSelect.appendChild(option);
-});
-
-
-classificationSelect.addEventListener('change', function () {
-    populateOrganizations(this.value);
-
-    // let departmentSelect = departmentSelect.value;
-    // let courseSelect = courseSelect.value;
-    // let categorySelect = categorySelect.value;
-    // let subjectSelect = subjectSelect.value;
-
-    console.log('departmentSelect.value : ', departmentSelect.value)
-    console.log('courseSelect.value : ', courseSelect.value)
-    console.log('categorySelect.value : ', categorySelect.value)
-    console.log('subjectSelect.value : ', subjectSelect.value)
-
-    console.log('populateCategories courseId three : ', courseSelect.value)
-    populateCategories(courseSelect.value);
-    populateSubjects(categorySelect.value);
-});
-
-organizationSelect.addEventListener('change', function () {
-    populateDepartments(this.value);
-
-    populateCategories(courseSelect.value);
-    populateSubjects(categorySelect.value);
-});
-
-departmentSelect.addEventListener('change', function () {
-    populateCourses(this.value);
-
-    populateCategories(courseSelect.value);
-    populateSubjects(categorySelect.value);
-});
-
-courseSelect.addEventListener('change', function () {
-    console.log('courseSelect this.value : ', this.value)
-    populateCategories(this.value);
-
-    populateCategories(courseSelect.value);
-    populateSubjects(categorySelect.value);
-});
-
-categorySelect.addEventListener('change', function () {
-    populateSubjects(this.value);
-});
-
-// Populate organizations for default classification
-const defaultClassificationId = parseInt(classificationSelect.value);
-populateOrganizations(defaultClassificationId);

@@ -1,10 +1,5 @@
-function displayErrorMessage(message, elementId) {
-    elementId.innerHTML = message;
-}
-
-function showErrorMessage(message, elementId) {
+function showSuccessMessage(message, elementId) {
     // var successDiv = getId(elementId);
-
     elementId.innerHTML = message;
     elementId.classList.remove("hidden");
     setTimeout(function(){

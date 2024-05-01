@@ -201,100 +201,31 @@ const organizationsJson = readFileSync(path.join(__dirname, '../../', 'public/re
 
 
 
-
-// // Multer configuration for handling file uploads
-// const storage = multer.diskStorage({
-//     destination: function (req, file, cb) {
-//       cb(null, './uploads'); // Uploads will be stored in the 'uploads' directory
-//     },
-//     filename: function (req, file, cb) {
-//       cb(null, Date.now() + '-' + file.originalname); // Appending timestamp to filename to avoid overwriting
-//     }
-//   });
-
-//   const upload = multer({ storage: storage });
-
-//   // Serve static files from the 'public' directory
-//   app.use(express.static(path.join(__dirname, 'public')));
-
-
-
-// // Handle form submission
-// app.post('/add-resources', upload.single('file'), (req, res) => {
-//     const { title, download_link, isbn } = req.body;
-//     const file = req.file;
-
-//     // Perform database insertion or any other required operations with the form data and file
-
-//     res.json({ message: 'Form submitted successfully', data: { title, download_link, isbn, file } });
-// });
-
-// home
 app.get(['/'], (req, res) => {
-    if (req.session.user === undefined) {
-        const sessionData = {
-            type: '',
-            first_name: '',
-            last_name: '',
-            email: '',
-            country: '',
-            state_or_province: '',
-            // ourGenerateNonce: lodashNonce,
-        };
+    let sessionData = {
+        name: '',
+        email: '',
+        user_type: '',
+        organization_id: '',
+    };
 
-        res.render(path.join(__dirname, '../../', 'public/view/home/index'), {
-            data: sessionData,
-        });
-    } else {
-        const sessionData = {
-            type: req.session.user.type,
-            first_name: req.session.user.first_name,
-            last_name: req.session.user.last_name,
-            email: req.session.user.email_or_social_media,
-            country: req.session.user.country,
-            state_or_province: req.session.user.state_or_province,
-            // ourGenerateNonce: lodashNonce,
+    if (req.session && req.session.user) {
+        sessionData = {
+            name: req.session.user.name || '',
+            email: req.session.user.email || '',
+            user_type: req.session.user.user_type || '',
+            organization_id: req.session.user.organization_id || '',
         };
-
-        res.render(path.join(__dirname, '../../', 'public/view/home/index'), {
-            data: sessionData,
-        });
     }
+
+    res.render(path.join(__dirname, '../../', 'public/view/home/index'), {
+        data: sessionData,
+    });
 });
 
 
 
-// app.get(['/library'], (req, res) => {
-//     if (req.session.user === undefined) {
-//         const sessionData = {
-//             type: '',
-//             first_name: '',
-//             last_name: '',
-//             email: '',
-//             country: '',
-//             state_or_province: '',
-//             // ourGenerateNonce: lodashNonce,
-//         };
 
-//         res.render(path.join(__dirname, '../../', 'public/view/library/library'), {
-//             data: sessionData,
-//         });
-//     } else {
-//         const sessionData = {
-//             type: req.session.user.type,
-//             first_name: req.session.user.first_name,
-//             last_name: req.session.user.last_name,
-//             email: req.session.user.email_or_social_media,
-//             country: req.session.user.country,
-//             state_or_province: req.session.user.state_or_province,
-//             // ourGenerateNonce: lodashNonce,
-//         };
-
-//         res.render(path.join(__dirname, '../../', 'public/view/library/library'), {
-//             data: sessionData,
-//         });
-//     }
-// });
 
 app.get('/contact-us', (req, res) => {
     res.render(path.join(__dirname, '../../', 'public/view/contact_us/contact_us'), {
@@ -312,136 +243,71 @@ app.get('/about-us', (req, res) => {
 
 
 
-// function convertToTitleCase(str) {
-//     return str.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
-// }
-
-
-
-
-
-// app.get('/classification/:classificationValue', (req, res) => {
-//     const classifications = JSON.parse(classificationsJson);
-
-//     const classificationValue = req.params.classificationValue;
-//     const classification = convertToTitleCase(classificationValue);
-
-//     const isExist = classifications.filter(data => data.title === classification);
-
-//     if (isExist) {
-//         const sessionData = {
-//             classificationValue: classificationValue,
-//         };
-
-//         res.render(path.join(__dirname, '../../', 'public/view/organizations/organizations'), {
-//             data: sessionData,
-//         });
-//     } else {
-//         res.render(path.join(__dirname, '../../', 'public/view/notFound/notFound'));
-//     }
-// });
-
-
-
-
-
-// app.get('/organization/:organizationValue', (req, res) => {
-//     const organizations = JSON.parse(organizationsJson);
-
-//     const organizationValue = req.params.organizationValue;
-//     const organization = convertToTitleCase(organizationValue);
-
-//     const isExist = organizations.filter(data => data.title === organization);
-
-//     if (isExist) {
-//         const sessionData = {
-//             organizationValue: organizationValue,
-//         };
-
-//         res.render(path.join(__dirname, '../../', 'public/view/departments/departments'), {
-//             data: sessionData,
-//         });
-//     } else {
-//         res.render(path.join(__dirname, '../../', 'public/view/notFound/notFound'));
-//     }
-// });
 
 
 app.get('/registration', (req, res) => {
-    if (req.session.user === undefined) {
-        const sessionData = {
-            type: '',
-            first_name: '',
-            last_name: '',
-            email: '',
-            country: '',
-            state_or_province: '',
-            // ourGenerateNonce: lodashNonce,
-        };
+    let sessionData = {
+        name: '',
+        email: '',
+        user_type: '',
+        organization_id: '',
+    };
 
-        res.render(path.join(__dirname, '../../', 'public/view/registration/registration'), {
-            data: sessionData,
-        });
-    } else {
-        const sessionData = {
-            type: req.session.user.type,
-            first_name: req.session.user.first_name,
-            last_name: req.session.user.last_name,
-            email: req.session.user.email_or_social_media,
-            country: req.session.user.country,
-            state_or_province: req.session.user.state_or_province,
-            // ourGenerateNonce: lodashNonce,
+    if (req.session && req.session.user) {
+        sessionData = {
+            name: req.session.user.name || '',
+            email: req.session.user.email || '',
+            user_type: req.session.user.user_type || '',
+            organization_id: req.session.user.organization_id || '',
         };
-
-        res.render(path.join(__dirname, '../../', 'public/view/registration/registration'), {
-            data: sessionData,
-        });
     }
+
+    res.render(path.join(__dirname, '../../', 'public/view/registration/registration'), {
+        data: sessionData,
+    });
 });
 
 app.get('/login', (req, res) => {
-    if (req.session.user === undefined) {
-        const sessionData = {
-            type: '',
-            first_name: '',
-            last_name: '',
-            email: '',
-            country: '',
-            state_or_province: '',
-            // ourGenerateNonce: lodashNonce,
-        };
+    let sessionData = {
+        name: '',
+        email: '',
+        user_type: '',
+        organization_id: '',
+    };
 
-        res.render(path.join(__dirname, '../../', 'public/view/login/login'), {
-            data: sessionData,
-        });
-    } else {
-        const sessionData = {
-            type: req.session.user.type,
-            first_name: req.session.user.first_name,
-            last_name: req.session.user.last_name,
-            email: req.session.user.email_or_social_media,
-            country: req.session.user.country,
-            state_or_province: req.session.user.state_or_province,
-            // ourGenerateNonce: lodashNonce,
+    if (req.session && req.session.user) {
+        sessionData = {
+            name: req.session.user.name || '',
+            email: req.session.user.email || '',
+            user_type: req.session.user.user_type || '',
+            organization_id: req.session.user.organization_id || '',
         };
-
-        res.render(path.join(__dirname, '../../', 'public/view/login/login'), {
-            data: sessionData,
-        });
     }
 
+    res.render(path.join(__dirname, '../../', 'public/view/login/login'), {
+        data: sessionData,
+    });
 });
 
 
-app.get('/departments', (req, res) => {
-    const sessionData = {
-        name: req.session.user.name,
-        email: req.session.user.email,
-        user_type: req.session.user.user_type,
-        organization_id: req.session.user.organization_id,
+app.get('/library', (req, res) => {
+    let sessionData = {
+        name: '',
+        email: '',
+        user_type: '',
+        organization_id: '',
     };
 
-   if (req.session.user === undefined) {
+    if (req.session && req.session.user) {
+        sessionData = {
+            name: req.session.user.name || '',
+            email: req.session.user.email || '',
+            user_type: req.session.user.user_type || '',
+            organization_id: req.session.user.organization_id || '',
+        };
+    }
+
+   if (!req.session || !req.session.user) {
         res.render(path.join(__dirname, '../../', 'public/view/login/login'));
     } else if (parseInt(req.session.user.user_type) === 1) {
         res.render(path.join(__dirname, '../../', 'public/view/admin_add_resources/admin_add_resources'), {
@@ -463,8 +329,6 @@ app.get('/courses/:departmentValue', (req, res) => {
         const sessionData = {
             departmentValue: departmentValue,
         };
-
-        // req.session.user = sessionData
 
         res.render(path.join(__dirname, '../../', 'public/view/courses/courses'), {
             data: sessionData,

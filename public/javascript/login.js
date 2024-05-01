@@ -64,7 +64,7 @@ function submitLoginForm(event) {
             if (data.message === 'Login successful') {
                 loginError.classList.remove("error_message");
                 displayErrorMessage(null, loginError);
-                window.location.href = '/departments';
+                window.location.href = '/library';
             }
         })
         .catch(error => {

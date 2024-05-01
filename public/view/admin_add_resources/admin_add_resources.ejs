@@ -46,6 +46,13 @@
                     <div class="hidden" id="addresources" role="tabpanel" aria-labelledby="addresources-tab">
                         <h5 class="mb-4 text-lg font-semibold">Add Resources :</h5>
                         <form action="javascript:void(0);" class="text-start" method="POST" id="addBookForm" name="addBookForm" enctype="multipart/form-data" accept-charset="utf-8">
+
+                            <div class="pb-10 ">
+                                <div id="addBookSuccessMessage" class="hidden block px-4 py-2 font-medium text-white border rounded-md bg-emerald-600 border-emerald-600"></div>
+
+                                <div id="addBookErrorMessage" class="relative hidden block px-4 py-2 font-medium text-white bg-red-600 border border-red-600 rounded-md"></div>
+                            </div>
+
                             <div class="grid grid-cols-1 gap-5 lg:grid-cols-2">
                                 <div>
                                     <label class="font-medium form-label">
@@ -55,6 +62,7 @@
                                     <div class="relative mt-2 form-icon">
                                         <input type="text" class="w-full h-10 px-3 py-2 bg-transparent border border-gray-200 rounded outline-none form-input ps-12 dark:bg-slate-900 dark:text-slate-200 focus:border-indigo-600 dark:border-gray-800 dark:focus:border-indigo-600 focus:ring-0" placeholder="" id="title" name="title" required="">
                                     </div>
+                                    <span id="titleError" class="text-red-600 error-message"></span>
                                 </div>
                                 <div>
                                     <label class="font-medium form-label">
@@ -131,6 +139,13 @@
                     <div class="hidden" id="editresources" role="tabpanel" aria-labelledby="editresources-tab">
                         <h5 class="mb-4 text-lg font-semibold">Update Resources :</h5>
                         <form action="javascript:void(0);" class="text-start" method="POST" id="editResourcesForm" name="editResourcesForm" enctype="multipart/form-data" accept-charset="utf-8">
+
+                            <div class="pb-10 ">
+                                <div id="editResourcesSuccessMessage" class="hidden block px-4 py-2 font-medium text-white border rounded-md bg-emerald-600 border-emerald-600"></div>
+
+                                <div id="editResourcesErrorMessage" class="relative hidden block px-4 py-2 font-medium text-white bg-red-600 border border-red-600 rounded-md"></div>
+                            </div>
+
                             <div class="grid grid-cols-1 gap-5 lg:grid-cols-2">
                                 <div>
                                     <label class="font-medium form-label">
@@ -183,6 +198,13 @@
                             <h6 class="text-2xl font-bold" id="resourcesTitle">Resources</h6>
                             <p class="mt-2 text-slate-400">Set here who can access this resources.</p>
                         </div>
+
+                        <div class="pb-10 ">
+                            <div id="resourceSetupSuccessMessage" class="hidden block px-4 py-2 font-medium text-white border rounded-md bg-emerald-600 border-emerald-600"></div>
+
+                            <div id="resourceSetupErrorMessage" class="relative hidden block px-4 py-2 font-medium text-white bg-red-600 border border-red-600 rounded-md"></div>
+                        </div>
+
                         <form action="javascript:void(0);" class="text-start" method="POST" id="resourceSetupForm" name="resourceSetupForm" enctype="multipart/form-data" accept-charset="utf-8">
                             <div class="grid grid-cols-1 gap-5 lg:grid-cols-2">
                                 <div>
@@ -246,6 +268,9 @@
 <script src="<%= process.env.GERGI_HOSTNAME %>references/classifications.js"></script>
 <script src="<%= process.env.GERGI_HOSTNAME %>references/organizations.js"></script>
 <script src="<%= process.env.GERGI_HOSTNAME %>references/departments.js"></script>
+<script src="<%= process.env.GERGI_HOSTNAME %>javascript/displaySuccessMessage.js"></script>
+<script src="<%= process.env.GERGI_HOSTNAME %>javascript/displayErrorMessage.js"></script>
+<script src="<%= process.env.GERGI_HOSTNAME %>javascript/resetErrorMessages.js"></script>
 <script src="<%= process.env.GERGI_HOSTNAME %>javascript/admin_add_resources.js"></script>
 
 <%- include('../includes/script/script.ejs') %>

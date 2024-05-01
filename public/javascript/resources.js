@@ -33,7 +33,7 @@ async function displayResources() {
 displayResources().then((data) => {
     const resourcesContainer = getId("resourcesContainer");
 
-    const imageSrc = `${baseUrl}/uploads/gergi/optometry/ophthalmology-current-and-future-developments-vol-3.webp`
+    const imageSrc = `${baseUrl}/uploads/gergi/optometry/OPTOMETRY.webp`
     const publicationYear = 'Publication Year : 2021';
     const author = "Author : WebMaster";
 
@@ -267,7 +267,7 @@ async function search(searchData) {
         const resourcesContainer = getId("resourcesContainer");
         resourcesContainer.innerHTML = '';
 
-        const imageSrc = `${baseUrl}/uploads/gergi/optometry/ophthalmology-current-and-future-developments-vol-3.webp`
+        const imageSrc = `${baseUrl}/uploads/gergi/optometry/OPTOMETRY.webp`
         const publicationYear = 'Publication Year : 2021';
         const author = "Author : WebMaster";
 

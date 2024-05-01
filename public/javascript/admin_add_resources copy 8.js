@@ -15,21 +15,6 @@ let editResourcesErrorMessage = getId('editResourcesErrorMessage');
 let editResourcesForm = getId('editResourcesForm');
 
 
-
-let classificationSelect = getId('classificationData');
-let organizationSelect = getId('organizationData');
-let departmentSelect = getId('departmentData');
-let courseSelect = getId('courseData');
-let categorySelect = getId('categoryData');
-let subjectSelect = getId('subjectData');
-
-
-
-let resourceSetupSuccessMessage = getId('resourceSetupSuccessMessage');
-let resourceSetupErrorMessage = getId('resourceSetupErrorMessage');
-
-
-
 function validateAddBookForm() {
     title = title.value;
 
@@ -137,7 +122,7 @@ function generateTableRows(data) {
                 <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="currentColor" d="M20.71 4.04c.39-.39.39-1.04 0-1.41L18.37.29C18-.1 17.35-.1 16.96.29L15 2.25L18.75 6m-1 1L14 3.25l-10 10V17h3.75z"/></svg>
                 </a>
 
-                <a href="javascript:void(0);" onclick="resourceSetupFormDiv('${item.resource_id}', '${item.title}')" class="size-9 inline-flex items-center justify-center tracking-wide align-middle duration-500 text-base text-center rounded-md border bg-transparent hover:bg-indigo-600 border-indigo-600 text-indigo-600 hover:text-white">
+                <a href="javascript:void(0);" onclick="resourceSetupFormDiv(${item.id}, '${item.title}')" class="size-9 inline-flex items-center justify-center tracking-wide align-middle duration-500 text-base text-center rounded-md border bg-transparent hover:bg-indigo-600 border-indigo-600 text-indigo-600 hover:text-white">
                 <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="currentColor" d="M15 20a1 1 0 0 0-1-1h-1v-2h4a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h4v2h-1a1 1 0 0 0-1 1H2v2h7a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1h7v-2zm-6.75-9.92l1.16-1.16L11 10.5l3.59-3.58l1.16 1.41L11 13.08z"/></svg>
                 </a>
 
@@ -315,11 +300,9 @@ resourceSetupForm.addEventListener('submit', function (event) {
     })
     .then(data => {
         console.log('Data sent successfully:', data);
-        showSuccessMessage('Data saved successfully', resourceSetupSuccessMessage)
     })
     .catch(error => {
         console.error('There was a problem with your fetch operation:', error);
-        showErrorMessage('Data saved failed', resourceSetupErrorMessage)
     });
 });
 
@@ -327,13 +310,10 @@ resourceSetupForm.addEventListener('submit', function (event) {
 
 
 
-
-
-
 function populateOrganizations(classificationId) {
-    // const organizationSelect = document.getElementById('organizationData');
+    const organizationSelect = document.getElementById('organizationData');
     organizationSelect.innerHTML = '';
-    // const departmentSelect = document.getElementById('departmentData');
+    const departmentSelect = document.getElementById('departmentData');
     departmentSelect.innerHTML = '';
 
     const filteredOrganizations = organizationsReference.filter(org => parseInt(org.classification_id) === parseInt(classificationId));
@@ -349,7 +329,7 @@ function populateOrganizations(classificationId) {
 }
 
 function populateDepartments(organizationId) {
-    // const departmentSelect = document.getElementById('departmentData');
+    const departmentSelect = document.getElementById('departmentData');
     departmentSelect.innerHTML = '';
 
     const filteredDepartments = departmentsReference.filter(department => parseInt(department.organization_id) === parseInt(organizationId));
@@ -367,20 +347,20 @@ function populateDepartments(organizationId) {
         });
     }
 
-    // let courseSelect = document.getElementById('courseData');
-    courseSelect.innerHTML = '';
+    const courseDataSelect = document.getElementById('courseData');
+    courseDataSelect.innerHTML = '';
 
     populateCourses(departmentSelect.value);
 }
 
 function populateCourses(departmentId) {
-    // let courseDataSelect = document.getElementById('courseData');
-    courseSelect.innerHTML = '';
+    const courseDataSelect = document.getElementById('courseData');
+    courseDataSelect.innerHTML = '';
 
     if (departmentId === 'None') {
         const noneOption = document.createElement('option');
         noneOption.textContent = 'None';
-        courseSelect.appendChild(noneOption);
+        courseDataSelect.appendChild(noneOption);
     } else {
         const requestOptions = {
             method: 'POST',
@@ -402,11 +382,10 @@ function populateCourses(departmentId) {
                     const option = document.createElement('option');
                     option.value = course.id;
                     option.textContent = course.course_title;
-                    courseSelect.appendChild(option);
+                    courseDataSelect.appendChild(option);
                 });
 
-                console.log('populateCategories(courseSelect.value) one : ', courseSelect.value)
-                populateCategories(courseSelect.value);
+                populateCategories(courseDataSelect.value);
             })
             .catch(error => {
                 console.error('Error updating resource:', error);
@@ -415,15 +394,13 @@ function populateCourses(departmentId) {
 }
 
 function populateCategories(courseId) {
-    console.log('populateCategories courseId two : ', courseId)
-    // let categorySelect = document.getElementById('categoryData');
-    categorySelect.innerHTML = '';
+    const categoryDataSelect = document.getElementById('categoryData');
+    categoryDataSelect.innerHTML = '';
 
     if (courseId === 'None') {
-        categorySelect.innerHTML = '';
         const noneOption = document.createElement('option');
         noneOption.textContent = 'None';
-        categorySelect.appendChild(noneOption);
+        categoryDataSelect.appendChild(noneOption);
     } else {
         const requestOptions = {
             method: 'POST',
@@ -441,21 +418,14 @@ function populateCategories(courseId) {
                 return response.json();
             })
             .then(data => {
-                categorySelect.innerHTML = '';
+                data.forEach(category => {
+                    const option = document.createElement('option');
+                    option.value = category.id;
+                    option.textContent = category.title;
+                    categoryDataSelect.appendChild(option);
+                });
 
-                if (data.length === 0) {
-                    const noneOption = document.createElement('option');
-                    noneOption.textContent = 'None';
-                    categorySelect.appendChild(noneOption);
-                } else {
-                    data.forEach(category => {
-                        const option = document.createElement('option');
-                        option.value = category.id;
-                        option.textContent = category.title;
-                        categorySelect.appendChild(option);
-                    });
-                }
-                populateSubjects(categorySelect.value);
+                populateSubjects(categoryDataSelect.value);
             })
             .catch(error => {
                 console.error('Error updating resource:', error);
@@ -464,13 +434,13 @@ function populateCategories(courseId) {
 }
 
 function populateSubjects(categoryId) {
-    // let subjectSelect = document.getElementById('subjectData');
-    subjectSelect.innerHTML = '';
+    const subjectDataSelect = document.getElementById('subjectData');
+    subjectDataSelect.innerHTML = '';
 
     if (categoryId === 'None') {
         const noneOption = document.createElement('option');
         noneOption.textContent = 'None';
-        subjectSelect.appendChild(noneOption);
+        subjectDataSelect.appendChild(noneOption);
     } else {
         const requestOptions = {
             method: 'POST',
@@ -488,18 +458,12 @@ function populateSubjects(categoryId) {
                 return response.json();
             })
             .then(data => {
-                if (data.length === 0) {
-                    const noneOption = document.createElement('option');
-                    noneOption.textContent = 'None';
-                    subjectSelect.appendChild(noneOption);
-                } else {
-                    data.forEach(subject => {
-                        const option = document.createElement('option');
-                        option.value = subject.id;
-                        option.textContent = subject.subject_title;
-                        subjectSelect.appendChild(option);
-                    });
-                }
+                data.forEach(subject => {
+                    const option = document.createElement('option');
+                    option.value = subject.id;
+                    option.textContent = subject.subject_title;
+                    subjectDataSelect.appendChild(option);
+                });
             })
             .catch(error => {
                 console.error('Error updating resource:', error);
@@ -507,8 +471,10 @@ function populateSubjects(categoryId) {
     }
 }
 
-
-
+const classificationSelect = document.getElementById('classificationData');
+const organizationSelect = document.getElementById('organizationData');
+const departmentSelect = document.getElementById('departmentData');
+const categoryDataSelect = document.getElementById('categoryData');
 
 // Populate classification select options
 classificationsReference.forEach(classification => {
@@ -518,48 +484,20 @@ classificationsReference.forEach(classification => {
     classificationSelect.appendChild(option);
 });
 
-
+// Event listeners
 classificationSelect.addEventListener('change', function () {
     populateOrganizations(this.value);
-
-    // let departmentSelect = departmentSelect.value;
-    // let courseSelect = courseSelect.value;
-    // let categorySelect = categorySelect.value;
-    // let subjectSelect = subjectSelect.value;
-
-    console.log('departmentSelect.value : ', departmentSelect.value)
-    console.log('courseSelect.value : ', courseSelect.value)
-    console.log('categorySelect.value : ', categorySelect.value)
-    console.log('subjectSelect.value : ', subjectSelect.value)
-
-    console.log('populateCategories courseId three : ', courseSelect.value)
-    populateCategories(courseSelect.value);
-    populateSubjects(categorySelect.value);
 });
 
 organizationSelect.addEventListener('change', function () {
     populateDepartments(this.value);
-
-    populateCategories(courseSelect.value);
-    populateSubjects(categorySelect.value);
 });
 
 departmentSelect.addEventListener('change', function () {
     populateCourses(this.value);
-
-    populateCategories(courseSelect.value);
-    populateSubjects(categorySelect.value);
 });
 
-courseSelect.addEventListener('change', function () {
-    console.log('courseSelect this.value : ', this.value)
-    populateCategories(this.value);
-
-    populateCategories(courseSelect.value);
-    populateSubjects(categorySelect.value);
-});
-
-categorySelect.addEventListener('change', function () {
+categoryDataSelect.addEventListener('change', function () {
     populateSubjects(this.value);
 });
 

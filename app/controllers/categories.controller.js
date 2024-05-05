@@ -87,3 +87,16 @@ exports.getCategoriesByCourseId = async (req, res) => {
     }
 
 };
+
+
+
+exports.getAll = async (req, res) => {
+    const getRows = await Categories.findAll()
+        .then((data) => {
+            console.error('Categories : ', data);
+            res.send(data);
+        })
+        .catch((err) => {
+            return 'Some error occurred while retrieving Categories.';
+        });
+};

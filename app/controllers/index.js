@@ -10,5 +10,6 @@ controller.resourceSetups = require('./resourceSetups.controller.js');
 controller.categories = require('./categories.controller.js');
 controller.organizations = require('./organizations.controller.js');
 controller.subjects = require('./subjects.controller.js');
+controller.classifications = require('./classifications.controller.js');
 
 module.exports = controller;

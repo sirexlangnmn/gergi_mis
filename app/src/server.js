@@ -134,9 +134,7 @@ if (isHttps) {
 const api_key_secret = process.env.API_KEY_SECRET;
 
 require('../routes/index.js')(app);
-// require('../routes/password.js')(app);
 require('../routes/upload-file.js')(app);
-// require('../routes/forgot-password.js')(app);
 
 const pdfService = require('../service/pdf-service');
 const pdfServiceForTrader = require('../service/pdf-trader');
@@ -310,7 +308,7 @@ app.get('/library', (req, res) => {
    if (!req.session || !req.session.user) {
         res.render(path.join(__dirname, '../../', 'public/view/login/login'));
     } else if (parseInt(req.session.user.user_type) === 1) {
-        res.render(path.join(__dirname, '../../', 'public/view/admin_add_resources/admin_add_resources'), {
+        res.render(path.join(__dirname, '../../', 'public/view/admin/admin'), {
             data: sessionData,
         });
     }  else if (parseInt(req.session.user.user_type) === 2) {
@@ -363,32 +361,6 @@ app.get('/resources/:courseValue', (req, res) => {
 
 
 
-app.get('/admin/add-resources', (req, res) => {
-
-    const courseValue = req.params.courseValue;
-
-    if (courseValue) {
-        const sessionData = {
-            fullName: req.session.user.name,
-            organizationId: req.session.user.organization_id,
-            departmentId: req.session.department_id,
-            departmentTitle: req.session.department_title,
-            courseValue: courseValue,
-        };
-
-        res.render(path.join(__dirname, '../../', 'public/view/admin_add_resources/admin_add_resources'), {
-            data: sessionData,
-        });
-    } else {
-        res.render(path.join(__dirname, '../../', 'public/view/login/login'));
-    }
-});
-
-
-
-
-
-
 app.get('/logout', function (req, res, next) {
     // remove the req.user property and clear the login session
     //req.logout();
@@ -414,7 +386,7 @@ server.listen(port, null, () => {
     log.debug(
         `%c
 
-	███████╗██╗ ██████╗ ███╗   ██╗      ███████╗███████╗██████╗ ██╗   ██╗███████╗██████╗ 
+	███████╗██╗ ██████╗ ███╗   ██╗      ███████╗███████╗██████╗ ██╗   ██╗███████╗██████╗
 	██╔════╝██║██╔════╝ ████╗  ██║      ██╔════╝██╔════╝██╔══██╗██║   ██║██╔════╝██╔══██╗
 	███████╗██║██║  ███╗██╔██╗ ██║█████╗███████╗█████╗  ██████╔╝██║   ██║█████╗  ██████╔╝
 	╚════██║██║██║   ██║██║╚██╗██║╚════╝╚════██║██╔══╝  ██╔══██╗╚██╗ ██╔╝██╔══╝  ██╔══██╗

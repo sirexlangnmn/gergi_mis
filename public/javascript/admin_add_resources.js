@@ -2,6 +2,20 @@ document.addEventListener("DOMContentLoaded", function () {
 
 });
 
+
+let resourcesTableBody = getId('resources-table-body');
+let classificationsTableBody = getId('classifications-table-body');
+let organizationsTableBody = getId('organizations-table-body');
+let departmentsTableBody = getId('departments-table-body');
+let coursesTableBody = getId('courses-table-body');
+let categoriesTableBody = getId('categories-table-body');
+let subjectsTableBody = getId('subjects-table-body');
+
+
+let resourceSetupForm = getId('resourceSetupForm');
+
+
+
 let title = getId('title');
 let titleError = getId('titleError');
 let addBookSuccessMessage = getId('addBookSuccessMessage');
@@ -27,6 +41,10 @@ let subjectSelect = getId('subjectData');
 
 let resourceSetupSuccessMessage = getId('resourceSetupSuccessMessage');
 let resourceSetupErrorMessage = getId('resourceSetupErrorMessage');
+
+
+
+
 
 
 
@@ -74,7 +92,6 @@ function sendFormData(formData) {
 }
 
 function handleSuccess(data) {
-    console.log('Data saved successfully:', data);
     showSuccessMessage('Data saved successfully', addBookSuccessMessage)
     addBookForm.reset();
 }
@@ -117,7 +134,7 @@ displayResources().then((data) => {
 
 
 function generateTableRows(data) {
-    const tbody = document.getElementById('resources-table-body');
+    // const resourcesTableBody = document.getElementById('resources-table-body');
     let html = '';
 
     data.forEach((item, index) => {
@@ -149,62 +166,17 @@ function generateTableRows(data) {
         `;
     });
 
-    tbody.innerHTML = html;
+    resourcesTableBody.innerHTML = html;
 }
 
 
 
 
 
-function editResourcesDiv(resourceId) {
-    getResourcesById(resourceId)
-    getId('addresources').classList.add('hidden');
-    getId('editresources').classList.remove('hidden');
-    getId('resourcesetuppage').classList.add('hidden');
-    getId('resourcesetup').classList.add('hidden');
-}
-
-function hideAddResourcesDiv() {
-    getId('addresources').classList.remove('hidden');
-    getId('editresources').classList.add('hidden');
-    getId('resourcesetuppage').classList.add('hidden');
-    getId('resourcesetup').classList.add('hidden');
-}
-
-function showAddResourcesDiv() {
-    getId('addresources').classList.remove('hidden');
-    getId('editresources').classList.add('hidden');
-    getId('resourcesetuppage').classList.add('hidden');
-    getId('resourcesetup').classList.add('hidden');
-}
-
-function showResourceSetupDiv() {
-    getId('addresources').classList.add('hidden');
-    getId('editresources').classList.add('hidden');
-    getId('resourcesetuppage').classList.remove('hidden');
-    getId('resourcesetup').classList.add('hidden');
-
-    displayResources().then((data) => {
-        generateTableRows(data)
-    })
-        .catch((error) => {
-            console.error('Error rendering resource : ', error);
-        });
-}
 
 
 
 
-
-function resourceSetupFormDiv(resourceId, title) {
-    getId('resourcesTitle').innerHTML = title;
-    getId('resourceId').value = resourceId;
-
-    getId('addresources').classList.add('hidden');
-    getId('editresources').classList.add('hidden');
-    getId('resourcesetuppage').classList.add('hidden');
-    getId('resourcesetup').classList.remove('hidden');
-}
 
 
 function getResourcesById(resourceId) {
@@ -257,7 +229,6 @@ editResourcesForm.addEventListener('submit', function (event) {
             return response.text(); // or response.json() if you expect JSON response
         })
         .then(data => {
-            console.log('Resource updated successfully:', data);
             showSuccessMessage('Resource updated successfully', editResourcesSuccessMessage)
             editResourcesForm.reset();
             setTimeout(function(){
@@ -274,7 +245,7 @@ editResourcesForm.addEventListener('submit', function (event) {
 
 
 
-const resourceSetupForm = document.getElementById('resourceSetupForm');
+// const resourceSetupForm = document.getElementById('resourceSetupForm');
 
 resourceSetupForm.addEventListener('submit', function (event) {
     event.preventDefault();
@@ -314,7 +285,6 @@ resourceSetupForm.addEventListener('submit', function (event) {
         return response.json();
     })
     .then(data => {
-        console.log('Data sent successfully:', data);
         showSuccessMessage('Data saved successfully', resourceSetupSuccessMessage)
     })
     .catch(error => {
@@ -405,7 +375,6 @@ function populateCourses(departmentId) {
                     courseSelect.appendChild(option);
                 });
 
-                console.log('populateCategories(courseSelect.value) one : ', courseSelect.value)
                 populateCategories(courseSelect.value);
             })
             .catch(error => {
@@ -415,8 +384,6 @@ function populateCourses(departmentId) {
 }
 
 function populateCategories(courseId) {
-    console.log('populateCategories courseId two : ', courseId)
-    // let categorySelect = document.getElementById('categoryData');
     categorySelect.innerHTML = '';
 
     if (courseId === 'None') {
@@ -521,40 +488,24 @@ classificationsReference.forEach(classification => {
 
 classificationSelect.addEventListener('change', function () {
     populateOrganizations(this.value);
-
-    // let departmentSelect = departmentSelect.value;
-    // let courseSelect = courseSelect.value;
-    // let categorySelect = categorySelect.value;
-    // let subjectSelect = subjectSelect.value;
-
-    console.log('departmentSelect.value : ', departmentSelect.value)
-    console.log('courseSelect.value : ', courseSelect.value)
-    console.log('categorySelect.value : ', categorySelect.value)
-    console.log('subjectSelect.value : ', subjectSelect.value)
-
-    console.log('populateCategories courseId three : ', courseSelect.value)
     populateCategories(courseSelect.value);
     populateSubjects(categorySelect.value);
 });
 
 organizationSelect.addEventListener('change', function () {
     populateDepartments(this.value);
-
     populateCategories(courseSelect.value);
     populateSubjects(categorySelect.value);
 });
 
 departmentSelect.addEventListener('change', function () {
     populateCourses(this.value);
-
     populateCategories(courseSelect.value);
     populateSubjects(categorySelect.value);
 });
 
 courseSelect.addEventListener('change', function () {
-    console.log('courseSelect this.value : ', this.value)
     populateCategories(this.value);
-
     populateCategories(courseSelect.value);
     populateSubjects(categorySelect.value);
 });

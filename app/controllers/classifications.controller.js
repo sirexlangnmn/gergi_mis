@@ -4,18 +4,18 @@ const { check, validationResult } = require('express-validator');
 const db = require('../models');
 const sequelizeConfig = require('../config/sequelize.config.js');
 
-const Organizations = db.organizations;
+const Classifications = db.classifications;
 
 const Op = db.Sequelize.Op;
 
 
-exports.getAll = async (req, res) => {
-    const getRows = await Organizations.findAll()
+exports.getClassifications = async (req, res) => {
+    const getRows = await Classifications.findAll()
         .then((data) => {
-            console.error('organizationsData : ', data);
+            console.error('Classifications : ', data);
             res.send(data);
         })
         .catch((err) => {
-            return 'Some error occurred while retrieving Organizations.';
+            return 'Some error occurred while retrieving Classifications.';
         });
 };

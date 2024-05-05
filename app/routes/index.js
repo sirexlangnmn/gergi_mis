@@ -13,6 +13,7 @@ module.exports = (app) => {
     const categoriesController = controllers.categories;
     const organizationsController = controllers.organizations;
     const subjectsController = controllers.subjects;
+    const classificationsController = controllers.classifications;
 
     app.get(['/api/v1/get/resources/pdf'], resourcesController.pdf);
     app.post(['/api/get/resources-order-by-latest'], resourcesController.resourcesOrderByLatest);
@@ -30,7 +31,9 @@ module.exports = (app) => {
     app.get(['/api/get/organizations'], organizationsController.getAll);
     app.get(['/api/get/departments'], departmentsController.getAll);
     app.post(['/api/get/subjects-by-category-id'], subjectsController.getSubjectsByCategoryId);
-    
+
+    app.post(['/api/get/classifications'], classificationsController.getClassifications);
+
 
 
 

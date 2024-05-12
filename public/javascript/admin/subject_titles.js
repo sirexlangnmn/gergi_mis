@@ -1,6 +1,21 @@
+let subjectsTableBody = getId('subjects-table-body');
+
+let subjectTitle = getId('subjectTitle');
+let subjectTitleError = getId('subjectTitleError');
+let addSubjectSuccessMessage = getId('addSubjectSuccessMessage');
+let addSubjectErrorMessage = getId('addSubjectErrorMessage');
+let addSubjectForm = getId('addSubjectForm');
+let addSubjectSubmit = getId('addSubjectSubmit');
+
+
+const subjectEndpoint = {
+    create: `${baseUrl}api/post/add-subject-title`,
+    get: `${baseUrl}api/get/subject-titles`
+}
+
 async function getSubjectTitles() {
     try {
-        const response = await fetch(`${baseUrl}api/get/subject-titles`, {
+        const response = await fetch(subjectEndpoint.get, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -44,4 +59,48 @@ function displaySubjectTitles(data) {
 
     subjectsTableBody.innerHTML = html;
 
+}
+
+
+function validateAddSubjectForm() {
+
+    resetErrorMessages();
+
+    let isValid = true;
+
+    if (!getId('subjectTitle').value) {
+        displayErrorMessage('Please enter a Title', subjectTitleError);
+        isValid = false;
+    }
+
+    return isValid;
+}
+
+
+addSubjectSubmit.addEventListener('click', submitAddSubjectForm);
+
+function submitAddSubjectForm(event) {
+    event.preventDefault();
+
+    if (!validateAddSubjectForm()) {
+        return;
+    }
+
+    const formData = {
+        subjectInput: getId('subjectTitle').value
+    };
+
+    sendFormData(formData, subjectEndpoint.create)
+        .then(data => handleSuccess(data, 'Data saved successfully', addSubjectSuccessMessage, resetAddSubjectForm))
+        .catch(error => handleError(error, 'Data saved failed', addSubjectErrorMessage));
+}
+
+function resetAddSubjectForm() {
+    getId('subjectTitle').value = "";
+}
+
+
+
+function editSubjectDiv(subjectId) {
+    console.log('editSubjectDiv subjectId : ', subjectId)
 }

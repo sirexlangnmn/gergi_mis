@@ -4,15 +4,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 let resourcesTableBody = getId('resources-table-body');
-let classificationsTableBody = getId('classifications-table-body');
-let organizationsTableBody = getId('organizations-table-body');
-let departmentsTableBody = getId('departments-table-body');
-let coursesTableBody = getId('courses-table-body');
-let categoriesTableBody = getId('categories-table-body');
-let subjectsTableBody = getId('subjects-table-body');
-
-
-let resourceSetupForm = getId('resourceSetupForm');
 
 
 
@@ -36,16 +27,13 @@ let departmentSelect = getId('departmentData');
 let courseSelect = getId('courseData');
 let categorySelect = getId('categoryData');
 let subjectSelect = getId('subjectData');
-
-
-
+let resourceSetupForm = getId('resourceSetupForm');
 let resourceSetupSuccessMessage = getId('resourceSetupSuccessMessage');
 let resourceSetupErrorMessage = getId('resourceSetupErrorMessage');
 
-
-
-
-
+const resourceEndpoint = {
+    create: `${baseUrl}add-resources`
+}
 
 
 function validateAddBookForm() {
@@ -73,13 +61,15 @@ addBookForm.addEventListener('submit', function (event) {
     }
 
     const formData = new FormData(addBookForm);
-    sendFormData(formData)
-        .then(handleSuccess)
-        .catch(handleError);
+    sendFormDataV1(formData, resourceEndpoint.create)
+        // .then(handleSuccess)
+        // .catch(handleError);
+        .then(data => handleSuccess(data, 'Data saved successfully', addBookSuccessMessage, resetAddBookForm))
+        .catch(error => handleError(error, 'Data saved failed', addBookErrorMessage));
 });
 
-function sendFormData(formData) {
-    return fetch('add-resources', {
+function sendFormDataV1(formData, endpoint) {
+    return fetch(endpoint, {
         method: 'POST',
         body: formData
     })
@@ -91,17 +81,23 @@ function sendFormData(formData) {
         });
 }
 
-function handleSuccess(data) {
-    showSuccessMessage('Data saved successfully', addBookSuccessMessage)
-    addBookForm.reset();
+
+function handleSuccess(data, successMessage, successElement, resetCallback) {
+    console.log('data:', data);
+    showSuccessMessage(successMessage, successElement);
+    resetCallback(); // Reset form
 }
 
-function handleError(error) {
+function handleError(error, errorMessage, errorElement) {
     console.error('Error:', error);
-    showErrorMessage('Data saved failed', addBookErrorMessage)
+    showErrorMessage(errorMessage, errorElement);
 }
 
-
+// Define a reset function to be used as a callback
+function resetAddBookForm() {
+    addBookForm.reset();
+    location.reload();
+}
 
 
 
@@ -134,7 +130,6 @@ displayResources().then((data) => {
 
 
 function generateTableRows(data) {
-    // const resourcesTableBody = document.getElementById('resources-table-body');
     let html = '';
 
     data.forEach((item, index) => {
@@ -245,7 +240,7 @@ editResourcesForm.addEventListener('submit', function (event) {
 
 
 
-// const resourceSetupForm = document.getElementById('resourceSetupForm');
+
 
 resourceSetupForm.addEventListener('submit', function (event) {
     event.preventDefault();
@@ -301,9 +296,7 @@ resourceSetupForm.addEventListener('submit', function (event) {
 
 
 function populateOrganizations(classificationId) {
-    // const organizationSelect = document.getElementById('organizationData');
     organizationSelect.innerHTML = '';
-    // const departmentSelect = document.getElementById('departmentData');
     departmentSelect.innerHTML = '';
 
     const filteredOrganizations = organizationsReference.filter(org => parseInt(org.classification_id) === parseInt(classificationId));
@@ -319,7 +312,6 @@ function populateOrganizations(classificationId) {
 }
 
 function populateDepartments(organizationId) {
-    // const departmentSelect = document.getElementById('departmentData');
     departmentSelect.innerHTML = '';
 
     const filteredDepartments = departmentsReference.filter(department => parseInt(department.organization_id) === parseInt(organizationId));
@@ -337,14 +329,12 @@ function populateDepartments(organizationId) {
         });
     }
 
-    // let courseSelect = document.getElementById('courseData');
     courseSelect.innerHTML = '';
 
     populateCourses(departmentSelect.value);
 }
 
 function populateCourses(departmentId) {
-    // let courseDataSelect = document.getElementById('courseData');
     courseSelect.innerHTML = '';
 
     if (departmentId === 'None') {
@@ -431,7 +421,6 @@ function populateCategories(courseId) {
 }
 
 function populateSubjects(categoryId) {
-    // let subjectSelect = document.getElementById('subjectData');
     subjectSelect.innerHTML = '';
 
     if (categoryId === 'None') {
@@ -476,8 +465,6 @@ function populateSubjects(categoryId) {
 
 
 
-
-// Populate classification select options
 classificationsReference.forEach(classification => {
     const option = document.createElement('option');
     option.value = classification.id;
@@ -514,6 +501,6 @@ categorySelect.addEventListener('change', function () {
     populateSubjects(this.value);
 });
 
-// Populate organizations for default classification
+
 const defaultClassificationId = parseInt(classificationSelect.value);
 populateOrganizations(defaultClassificationId);

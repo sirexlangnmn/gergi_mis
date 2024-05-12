@@ -34,11 +34,17 @@ module.exports = (app) => {
     app.get(['/api/get/departments'], departmentsController.getAll);
     app.post(['/api/get/subjects-by-category-id'], subjectsController.getSubjectsByCategoryId);
 
-    app.post(['/api/get/classifications'], classificationsController.getClassifications);
+    app.post(['/api/get/classifications'], classificationsController.getAll);
     app.post(['/api/get/course-titles'], courseTitlesController.getAll);
     app.post(['/api/get/categories'], categoriesController.getAll);
     app.post(['/api/get/subject-titles'], subjectTitlesController.getAll);
 
+    app.post(['/api/post/add-classification'], classificationsController.create);
+    app.post(['/api/post/add-organization'], organizationsController.create);
+    app.post(['/api/post/add-department'], departmentsController.create);
+    app.post(['/api/post/add-course-title'], courseTitlesController.create);
+    app.post(['/api/post/add-category'], categoriesController.create);
+    app.post(['/api/post/add-subject-title'], subjectTitlesController.create);
 
 
 

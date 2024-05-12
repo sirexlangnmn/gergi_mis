@@ -391,6 +391,42 @@
                     </div>
                     <!--ADD ORGANIZATIONS END-->
 
+                    <!-- ORGANIZATIONS START-->
+                    <div class="hidden" id="organizationspage" role="tabpanel" aria-labelledby="organizationspage-tab">
+                        <div class="flex items-center justify-between p-6 border-b border-gray-100 dark:border-gray-800">
+                            <h6 class="text-lg font-semibold">Organizations :</h6>
+                            <div class="position-relative">
+                                <a href="javascript:void(0);" class="inline-block px-5 py-2 text-base font-semibold tracking-wide text-center text-indigo-600 align-middle duration-500 bg-transparent border border-indigo-600 rounded-full hover:bg-indigo-600 hover:text-white" onclick="showAddOrganizationDiv()">Add Organization</a>
+                            </div>
+                        </div>
+                        <form action="javascript:void(0);" class="text-start" method="POST" id="" name="" enctype="multipart/form-data" accept-charset="utf-8">
+                            <div class="grid grid-cols-1 gap-6 mt-6 lg:grid-cols-12">
+                                <div class="xl:col-span-5 lg:col-span-12">
+                                    <div class="relative overflow-hidden bg-white rounded-md shadow dark:shadow-gray-700 dark:bg-slate-900">
+
+                                        <div class="relative overflow-x-auto block w-full max-h-[400px]" data-simplebar>
+                                            <table class="w-full text-start">
+                                                <thead class="text-base">
+                                                    <tr>
+                                                        <th class="text-start font-semibold text-[15px] p-4 min-w-[100px]">ID</th>
+                                                        <th class="text-start font-semibold text-[15px] p-4 min-w-[128px]">Title</th>
+                                                        <th class="text-end font-semibold text-[15px] p-4 min-w-[128px]">Status</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="organizations-table-body">
+                                                    <!-- Table rows will be dynamically generated here -->
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                            </div>
+                        </form><!--end form-->
+                    </div>
+                    <!-- ORGANIZATIONS END-->
+
                     <!-- DEPARTMENTS START-->
                     <div class="hidden" id="departmentspage" role="tabpanel" aria-labelledby="departmentspage-tab">
                         <div class="flex items-center justify-between p-6 border-b border-gray-100 dark:border-gray-800">
@@ -426,34 +462,6 @@
                         </form><!--end form-->
                     </div>
                     <!-- DEPARTMENTS END-->
-
-                    <!--ADD DEPARTMENTS START-->
-                    <div class="hidden" id="adddepartment" role="tabpanel" aria-labelledby="adddepartment-tab">
-                        <h5 class="mb-4 text-lg font-semibold">Add Department :</h5>
-                        <form action="javascript:void(0);" class="text-start" method="POST" id="addDepartmentForm" name="addDepartmentForm" enctype="multipart/form-data" accept-charset="utf-8">
-                    
-                            <div class="pb-10 ">
-                                <div id="addDepartmentSuccessMessage" class="hidden block px-4 py-2 font-medium text-white border rounded-md bg-emerald-600 border-emerald-600"></div>
-                    
-                                <div id="addDepartmentErrorMessage" class="relative hidden block px-4 py-2 font-medium text-white bg-red-600 border border-red-600 rounded-md"></div>
-                            </div>
-                    
-                            <div class="grid grid-cols-1 gap-5 lg:grid-cols-2">
-                                <div>
-                                    <label class="font-medium form-label">
-                                        Department Title
-                                        <span class="text-red-600">*</span>
-                                    </label>
-                                    <div class="relative mt-2 form-icon">
-                                        <input type="text" class="w-full h-10 px-3 py-2 bg-transparent border border-gray-200 rounded outline-none form-input ps-12 dark:bg-slate-900 dark:text-slate-200 focus:border-indigo-600 dark:border-gray-800 dark:focus:border-indigo-600 focus:ring-0" placeholder="" id="departmentTitle" name="departmentTitle" required="">
-                                    </div>
-                                    <span id="departmentTitleError" class="text-red-600 error-message"></span>
-                                </div>
-                            </div><!--end grid-->
-                            <input type="submit" id="addDepartmentSubmit" name="addDepartmentSubmit" class="inline-block px-5 py-2 mt-5 text-base font-semibold tracking-wide text-center text-white align-middle duration-500 bg-indigo-600 border border-indigo-600 rounded-md hover:bg-indigo-700 hover:border-indigo-700" value="Submit">
-                        </form><!--end form-->
-                    </div>
-                    <!--ADD DEPARTMENTS END-->
 
                     <!-- COURSES START-->
                     <div class="hidden" id="coursespage" role="tabpanel" aria-labelledby="coursespage-tab">
@@ -491,33 +499,6 @@
                     </div>
                     <!-- COURSES END-->
 
-                    <!--ADD COURSES START-->
-                    <div class="hidden" id="addcourse" role="tabpanel" aria-labelledby="addcourse-tab">
-                        <h5 class="mb-4 text-lg font-semibold">Add Course :</h5>
-                        <form action="javascript:void(0);" class="text-start" method="POST" id="addCourseForm" name="addCourseForm" enctype="multipart/form-data" accept-charset="utf-8">
-                            <div class="pb-10 ">
-                                <div id="addCourseSuccessMessage" class="hidden block px-4 py-2 font-medium text-white border rounded-md bg-emerald-600 border-emerald-600"></div>
-
-                                <div id="addCourseErrorMessage" class="relative hidden block px-4 py-2 font-medium text-white bg-red-600 border border-red-600 rounded-md"></div>
-                            </div>
-
-                            <div class="grid grid-cols-1 gap-5 lg:grid-cols-2">
-                                <div>
-                                    <label class="font-medium form-label">
-                                        Course Title
-                                        <span class="text-red-600">*</span>
-                                    </label>
-                                    <div class="relative mt-2 form-icon">
-                                        <input type="text" class="w-full h-10 px-3 py-2 bg-transparent border border-gray-200 rounded outline-none form-input ps-12 dark:bg-slate-900 dark:text-slate-200 focus:border-indigo-600 dark:border-gray-800 dark:focus:border-indigo-600 focus:ring-0" placeholder="" id="courseTitle" name="courseTitle" required="">
-                                    </div>
-                                    <span id="courseTitleError" class="text-red-600 error-message"></span>
-                                </div>
-                            </div><!--end grid-->
-                            <input type="submit" id="addCourseSubmit" name="addCourseSubmit" class="inline-block px-5 py-2 mt-5 text-base font-semibold tracking-wide text-center text-white align-middle duration-500 bg-indigo-600 border border-indigo-600 rounded-md hover:bg-indigo-700 hover:border-indigo-700" value="Submit">
-                        </form><!--end form-->
-                    </div>
-                    <!--ADD COURSES END-->
-
                     <!-- CATEGORIES START-->
                     <div class="hidden" id="categoriespage" role="tabpanel" aria-labelledby="categoriespage-tab">
                         <div class="flex items-center justify-between p-6 border-b border-gray-100 dark:border-gray-800">
@@ -554,34 +535,6 @@
                     </div>
                     <!-- CATEGORIES END-->
 
-                    <!--ADD CATEGORIES START-->
-                    <div class="hidden" id="addcategory" role="tabpanel" aria-labelledby="addcategory-tab">
-                        <h5 class="mb-4 text-lg font-semibold">Add Category :</h5>
-                        <form action="javascript:void(0);" class="text-start" method="POST" id="addCategoryForm" name="addCategoryForm" enctype="multipart/form-data" accept-charset="utf-8">
-
-                            <div class="pb-10 ">
-                                <div id="addCategorySuccessMessage" class="hidden block px-4 py-2 font-medium text-white border rounded-md bg-emerald-600 border-emerald-600"></div>
-
-                                <div id="addCategoryErrorMessage" class="relative hidden block px-4 py-2 font-medium text-white bg-red-600 border border-red-600 rounded-md"></div>
-                            </div>
-
-                            <div class="grid grid-cols-1 gap-5 lg:grid-cols-2">
-                                <div>
-                                    <label class="font-medium form-label">
-                                        Category Title
-                                        <span class="text-red-600">*</span>
-                                    </label>
-                                    <div class="relative mt-2 form-icon">
-                                        <input type="text" class="w-full h-10 px-3 py-2 bg-transparent border border-gray-200 rounded outline-none form-input ps-12 dark:bg-slate-900 dark:text-slate-200 focus:border-indigo-600 dark:border-gray-800 dark:focus:border-indigo-600 focus:ring-0" placeholder="" id="categoryTitle" name="categoryTitle" required="">
-                                    </div>
-                                    <span id="categoryTitleError" class="text-red-600 error-message"></span>
-                                </div>
-                            </div><!--end grid-->
-                            <input type="submit" id="addCategorySubmit" name="addCategorySubmit" class="inline-block px-5 py-2 mt-5 text-base font-semibold tracking-wide text-center text-white align-middle duration-500 bg-indigo-600 border border-indigo-600 rounded-md hover:bg-indigo-700 hover:border-indigo-700" value="Submit">
-                        </form><!--end form-->
-                    </div>
-                    <!--ADD CATEGORIES END-->
-
                     <!-- SUBJECT START-->
                     <div class="hidden" id="subjectspage" role="tabpanel" aria-labelledby="subjectspage-tab">
                         <div class="flex items-center justify-between p-6 border-b border-gray-100 dark:border-gray-800">
@@ -617,35 +570,6 @@
                         </form><!--end form-->
                     </div>
                     <!-- SUBJECT END-->
-
-                    <!--ADD SUBJECT START-->
-                    <div class="hidden" id="addsubject" role="tabpanel" aria-labelledby="addsubject-tab">
-                        <h5 class="mb-4 text-lg font-semibold">Add Subject :</h5>
-                        <form action="javascript:void(0);" class="text-start" method="POST" id="addSubjectForm" name="addSubjectForm" enctype="multipart/form-data" accept-charset="utf-8">
-
-                            <div class="pb-10 ">
-                                <div id="addSubjectSuccessMessage" class="hidden block px-4 py-2 font-medium text-white border rounded-md bg-emerald-600 border-emerald-600"></div>
-
-                                <div id="addSubjectErrorMessage" class="relative hidden block px-4 py-2 font-medium text-white bg-red-600 border border-red-600 rounded-md"></div>
-                            </div>
-
-                            <div class="grid grid-cols-1 gap-5 lg:grid-cols-2">
-                                <div>
-                                    <label class="font-medium form-label">
-                                        Subject Title
-                                        <span class="text-red-600">*</span>
-                                    </label>
-                                    <div class="relative mt-2 form-icon">
-                                        <input type="text" class="w-full h-10 px-3 py-2 bg-transparent border border-gray-200 rounded outline-none form-input ps-12 dark:bg-slate-900 dark:text-slate-200 focus:border-indigo-600 dark:border-gray-800 dark:focus:border-indigo-600 focus:ring-0" placeholder="" id="subjectTitle" name="subjectTitle" required="">
-                                    </div>
-                                    <span id="subjectTitleError" class="text-red-600 error-message"></span>
-                                </div>
-                            </div><!--end grid-->
-                            <input type="submit" id="addSubjectSubmit" name="addSubjectSubmit" class="inline-block px-5 py-2 mt-5 text-base font-semibold tracking-wide text-center text-white align-middle duration-500 bg-indigo-600 border border-indigo-600 rounded-md hover:bg-indigo-700 hover:border-indigo-700" value="Submit">
-                        </form><!--end form-->
-                    </div>
-                    <!--ADD SUBJECT END-->
-
                 </div>
             </div><!--end col-->
         </div><!--end grid-->

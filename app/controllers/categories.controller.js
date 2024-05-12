@@ -100,3 +100,36 @@ exports.getAll = async (req, res) => {
             return 'Some error occurred while retrieving Categories.';
         });
 };
+
+
+exports.create = async (req, res) => {
+    const errors = validationResult(req);
+
+    try {
+        if (!errors.isEmpty()) {
+            return res.status(400).send({
+                message: errors.array(),
+            });
+        }
+
+        const { categoryInput } = req.body;
+
+        let title = categoryInput;
+
+        const data = await Categories.create({
+            title
+        });
+
+        return res.status(201).json({
+            message: 'create categories successfully',
+            data: data,
+        });
+    } catch (error) {
+        console.error('Error during create categories :', error);
+        return res.status(500).json({
+            error: {
+                message: 'Internal server error',
+            },
+        });
+    }
+};

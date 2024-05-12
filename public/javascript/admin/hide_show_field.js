@@ -8,16 +8,19 @@ let toggleDiv = [
     'departmentspage',
     'coursespage',
     'categoriespage',
+    'subjectspage',
+    'addclassification',
+    'addorganization',
+    'adddepartment',
+    'addcourse',
+    'addcategory',
+    'addsubject'
 ];
 
 
 function editResourcesDiv(resourceId) {
     getResourcesById(resourceId)
     showAndHide('editresources', toggleDiv);
-}
-
-function hideAddResourcesDiv() {
-    showAndHide('addresources', toggleDiv);
 }
 
 function showAddResourcesDiv() {
@@ -43,13 +46,6 @@ function resourceSetupFormDiv(resourceId, title) {
 
 function showResourceSetupDiv() {
     showAndHide('resourcesetuppage', toggleDiv);
-
-    // displayResources().then((data) => {
-    //     generateTableRows(data)
-    // })
-    //     .catch((error) => {
-    //         console.error('Error rendering resource : ', error);
-    //     });
 }
 
 
@@ -58,7 +54,7 @@ function showClassificationsDiv() {
 }
 
 function showAddClassificationDiv() {
-
+    showAndHide('addclassification', toggleDiv);
 }
 
 function showOrganizationsDiv() {
@@ -66,7 +62,7 @@ function showOrganizationsDiv() {
 }
 
 function showAddOrganizationDiv() {
-
+    showAndHide('addorganization', toggleDiv);
 }
 
 function showDepartmentsDiv() {
@@ -74,7 +70,7 @@ function showDepartmentsDiv() {
 }
 
 function showAddDepartmentDiv() {
-
+    showAndHide('adddepartment', toggleDiv);
 }
 
 function showCoursesDiv() {
@@ -82,11 +78,15 @@ function showCoursesDiv() {
 }
 
 function showAddCourseDiv() {
-
+    showAndHide('addcourse', toggleDiv);
 }
 
 function showCategoriesDiv() {
     showAndHide('categoriespage', toggleDiv);
+}
+
+function showAddCategoryDiv() {
+    showAndHide('addcategory', toggleDiv);
 }
 
 function showSubjectDiv() {
@@ -94,7 +94,7 @@ function showSubjectDiv() {
 }
 
 function showAddSubjectDiv() {
-
+    showAndHide('addsubject', toggleDiv);
 }
 
 function showAndHide(showElement, toggleDiv) {

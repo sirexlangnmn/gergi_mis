@@ -53,3 +53,39 @@ exports.getAll = async (req, res) => {
             return 'Some error occurred while retrieving Departments.';
         });
 };
+
+
+exports.create = async (req, res) => {
+    const errors = validationResult(req);
+
+    try {
+        if (!errors.isEmpty()) {
+            return res.status(400).send({
+                message: errors.array(),
+            });
+        }
+
+        const { departmentInput } = req.body;
+
+        let title = departmentInput;
+
+        console.log('title : ', title)
+        console.log('departmentInput : ', departmentInput)
+
+        const data = await Departments.create({
+            title
+        });
+
+        return res.status(201).json({
+            message: 'create departments successfully',
+            data: data,
+        });
+    } catch (error) {
+        console.error('Error during create departments :', error);
+        return res.status(500).json({
+            error: {
+                message: 'Internal server error',
+            },
+        });
+    }
+};

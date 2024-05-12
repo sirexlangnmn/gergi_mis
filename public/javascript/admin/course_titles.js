@@ -1,6 +1,22 @@
+let coursesTableBody = getId('courses-table-body');
+
+let courseTitle = getId('courseTitle');
+let courseTitleError = getId('courseTitleError');
+let addCourseSuccessMessage = getId('addCourseSuccessMessage');
+let addCourseErrorMessage = getId('addCourseErrorMessage');
+let addCourseForm = getId('addCourseForm');
+let addCourseSubmit = getId('addCourseSubmit');
+
+
+const courseEndpoint = {
+    create: `${baseUrl}api/post/add-course-title`,
+    get: `${baseUrl}api/get/course-titles`
+}
+
+
 async function getCourseTitles() {
     try {
-        const response = await fetch(`${baseUrl}api/get/course-titles`, {
+        const response = await fetch(courseEndpoint.get, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -44,4 +60,48 @@ function displayCourseTitles(data) {
 
     coursesTableBody.innerHTML = html;
 
+}
+
+
+function validateAddCourseForm() {
+
+    resetErrorMessages();
+
+    let isValid = true;
+
+    if (!getId('courseTitle').value) {
+        displayErrorMessage('Please enter a Title', courseTitleError);
+        isValid = false;
+    }
+
+    return isValid;
+}
+
+
+addCourseSubmit.addEventListener('click', submitAddCourseForm);
+
+function submitAddCourseForm(event) {
+    event.preventDefault();
+
+    if (!validateAddCourseForm()) {
+        return;
+    }
+
+    const formData = {
+        courseInput: getId('courseTitle').value
+    };
+
+    sendFormData(formData, courseEndpoint.create)
+        .then(data => handleSuccess(data, 'Data saved successfully', addCourseSuccessMessage, resetAddCourseForm))
+        .catch(error => handleError(error, 'Data saved failed', addCourseErrorMessage));
+}
+
+function resetAddCourseForm() {
+    getId('courseTitle').value = "";
+}
+
+
+
+function editCourseDiv(courseId) {
+    console.log('editCourseDiv courseId : ', courseId)
 }
